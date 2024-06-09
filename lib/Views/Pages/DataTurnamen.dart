@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../Widgets/NavBar.dart';
 import '../Widgets/Sidebar.dart';
@@ -27,22 +28,58 @@ class DataTurnamen extends StatelessWidget {
               height: 10,
             ),
             ElevatedButton(
-                onPressed: () {Get.toNamed(PageNames.AddTurnamen);}, child: const Text("Tambah Data Turnamen")),
-                const SizedBox(height: 10,),
+                onPressed: () {
+                  Get.toNamed(PageNames.AddTurnamen);
+                },
+                child: const Text("Tambah Data Turnamen")),
+            const SizedBox(
+              height: 10,
+            ),
             GetBuilder<TurnamenController>(
               builder: (turC) {
-                if(turC.totalTur.value > 0){
+                if (turC.totalTur.value > 0) {
                   return ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: turC.totalTur.value,
-                  itemBuilder: (context, index) {
-                    Turnamen dataTur = turC.dataTurnamen[index];
-                    return ListTile(
-                      title: Text("${dataTur.nama}"),
-                    );
-                  },
-                );
-                }else{
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: turC.totalTur.value,
+                    itemBuilder: (context, index) {
+                      Turnamen dataTur = turC.dataTurnamen[index];
+                      return ListTile(
+                        title: Text("${dataTur.nama}"),
+                        
+                        subtitle: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("${dataTur.level}"),
+                            Text("${DateFormat('EEEE, dd MMMM yyyy', 'id').format(dataTur.date!)}")
+                          ],
+                        ),
+                        onTap: (){},
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
+                            IconButton(onPressed: (){
+                              Get.defaultDialog(
+                              title: "Konfirmasi Hapus",
+                              content: Text("Apakah kamu yakin untuk menghapus data ${dataTur.nama}?"),
+                              barrierDismissible: false,
+                              cancel: TextButton(onPressed: (){
+                                Get.back();
+                              }, child: const Text("Tidak")),
+                              confirm: TextButton(onPressed: (){
+                                turC.deleteData("${dataTur.id}");
+                              }, child: const Text("Iya"))
+                            );
+                            }, icon: const Icon(Icons.delete)),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else {
                   return Center(child: const Text("No Data"));
                 }
               },
