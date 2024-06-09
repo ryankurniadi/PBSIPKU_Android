@@ -2,6 +2,7 @@ abstract class PageNames{
   static const index = '/';
   static const Home = '/Dashboard';
   static const Blank = '/Blank';
+  static const Login = '/Login';
 
   //PBSI
   static const DataPBSI = '/DataPBSI';

@@ -24,9 +24,11 @@ class DataPBSI extends StatelessWidget {
             child: Text("DATA DARI FIREBASE"),
           ),
           Center(
-            child: ElevatedButton(onPressed: (){
-              Get.toNamed(PageNames.AddPBSI);
-            }, child: const Text("TAMBAH DATA")),
+            child: ElevatedButton(
+                onPressed: () {
+                  Get.toNamed(PageNames.AddPBSI);
+                },
+                child: const Text("TAMBAH DATA")),
           ),
           const SizedBox(
             height: 20,
@@ -41,30 +43,46 @@ class DataPBSI extends StatelessWidget {
                   itemBuilder: (context, index) {
                     PBSI data = pbsiC.dataPBSI[index];
                     return ListTile(
-                      onTap: (){},
+                      onTap: () {},
                       title: Text("${data.nama}"),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          IconButton(onPressed: (){
-                            Get.toNamed(PageNames.EditPBSI);
-                            pbsiC.id.value = "${data.id}";
-                            pbsiC.nama.value = "${data.nama}";
-
-                          }, icon: const Icon(Icons.edit, size: 20,)),
-                          IconButton(onPressed: (){
-                            Get.defaultDialog(
-                              title: "Konfirmasi Hapus",
-                              content: Text("Apakah kamu yakin untuk menghapus data ${data.nama}?"),
-                              barrierDismissible: false,
-                              cancel: TextButton(onPressed: (){
-                                Get.back();
-                              }, child: const Text("Tidak")),
-                              confirm: TextButton(onPressed: (){
-                                pbsiC.deleteData("${data.id}");
-                              }, child: const Text("Iya"))
-                            );
-                          }, icon: const Icon(Icons.delete, size: 20,))
+                          IconButton(
+                              onPressed: () {
+                                Get.toNamed(PageNames.EditPBSI);
+                                pbsiC.id.value = "${data.id}";
+                                pbsiC.nama.value = "${data.nama}";
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              )),
+                          IconButton(
+                              onPressed: () {
+                                Get.defaultDialog(
+                                    title: "Konfirmasi Hapus",
+                                    content: Text(
+                                        "Apakah kamu yakin untuk menghapus data ${data.nama}?"),
+                                    barrierDismissible: false,
+                                    cancel: TextButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        child: const Text("Tidak")),
+                                    confirm: TextButton(
+                                        onPressed: () {
+                                          if (!Get.isSnackbarOpen) {
+                                            pbsiC.deleteData("${data.id}");
+                                          }
+                                          
+                                        },
+                                        child: const Text("Iya")));
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ))
                         ],
                       ),
                     );

@@ -46,7 +46,7 @@ class DataTurnamen extends StatelessWidget {
                       Turnamen dataTur = turC.dataTurnamen[index];
                       return ListTile(
                         title: Text("${dataTur.nama}"),
-                        
+                        leading: Image(image: NetworkImage(dataTur.img!, ), width: 100, height: 100,),
                         subtitle: Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -70,7 +70,10 @@ class DataTurnamen extends StatelessWidget {
                                 Get.back();
                               }, child: const Text("Tidak")),
                               confirm: TextButton(onPressed: (){
-                                turC.deleteData("${dataTur.id}");
+                                if(!Get.isSnackbarOpen){
+                                   turC.deleteData("${dataTur.id}", "${dataTur.img}");
+                                }
+                               
                               }, child: const Text("Iya"))
                             );
                             }, icon: const Icon(Icons.delete)),

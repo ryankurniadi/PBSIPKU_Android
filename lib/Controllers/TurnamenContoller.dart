@@ -1,4 +1,8 @@
+import 'dart:html';
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -7,21 +11,29 @@ import '../Models/Turnamen.dart';
 
 class TurnamenController extends GetxController {
   final db = FirebaseFirestore.instance;
+  final Rx<Uint8List?> imageBytes = Uint8List(0).obs;
   var id = "".obs;
-  var nama = "".obs;
   var img = "".obs;
   var ket = "".obs;
-  var status = "".obs;
-  var date = DateTime.now().obs;
-  var totalTur = 0.obs;
-  var dateShow = "".obs;
   var level = "Level A".obs;
-
-  var dataTurnamen = [].obs;
-
+  var link = "".obs;
+  var nama = "".obs;
+  var status = "".obs;
   var table = 'turnamen';
+  var totalTur = 0.obs;
+  var dataTurnamen = [].obs;
+  var date = DateTime.now().obs;
+  var dateShow = "".obs;
+  var statusupload = true.obs;
 
-  void getData() async {
+  @override
+  void onInit() {
+    getData();
+    showDate(DateTime.now());
+    super.onInit();
+  }
+
+  getData() async {
     final ref = db.collection(table).withConverter(
         fromFirestore: Turnamen.fromFirestore,
         toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
@@ -41,19 +53,26 @@ class TurnamenController extends GetxController {
             level: docSnap.docs[i].data().level,
           ));
         }
-        print(totalTur);
-        update();
+      } else {
+        dataTurnamen.clear();
+        totalTur.value = 0;
       }
+      update();
     } catch (e) {
       print(e);
     }
   }
 
-  void addData() async {
+  void addData(Uint8List image) async {
+    statusupload.value = true;
     final ref = db.collection(table).withConverter(
         fromFirestore: Turnamen.fromFirestore,
         toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
     try {
+      await uploadImg(image);
+      if (!statusupload.value) {
+        throw Exception('No Image');
+      }
       await ref.add(
         Turnamen(
           nama: nama.value,
@@ -61,31 +80,34 @@ class TurnamenController extends GetxController {
           status: "Publish",
           ket: ket.value,
           level: level.value,
-          img: "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/badminton%2C-badminton-tournament%2Cevent-design-template-bcd5e2bb9c5b1c573406ef92af89d9d8.jpg?ts=1637014235"
+          img: link.value,
         ),
       );
-      getData();
+
       Get.back();
       Get.snackbar("Berhasil", "Data Berhasil Di tambah",
           backgroundColor: Colors.green);
+      await getData();
+      imageBytes.value = Uint8List(0);
     } catch (e) {
       Get.snackbar("Gagal", "Data Gagal Di Tambah",
           backgroundColor: Colors.red);
     }
   }
 
-  void deleteData(String id)async{
-     try {
+  void deleteData(String id, String img) async {
+    try {
+      Reference ref = FirebaseStorage.instance.refFromURL(img);
       await db.collection(table).doc(id).delete();
-      getData();
+      await ref.delete();
       Get.back();
       Get.snackbar("Berhasil", "Data Berhasil Di Hapus",
           backgroundColor: Colors.green);
+      getData();
     } catch (e) {
       Get.snackbar("Gagal", "Data Gagal Di Hapus", backgroundColor: Colors.red);
     }
   }
-
 
   void setDate(DateTime tgl) {
     date.value = tgl;
@@ -93,15 +115,45 @@ class TurnamenController extends GetxController {
     update();
   }
 
-  void showDate(DateTime tgl){
+  void showDate(DateTime tgl) {
     dateShow.value = "${DateFormat("EEEE, dd MMMM yyyy", "id").format(tgl)}";
     update();
   }
 
-  @override
-  void onInit() {
-    getData();
-    showDate(DateTime.now());
-    super.onInit();
+  uploadImg(Uint8List imageData) async {
+    try {
+      if (imageBytes.value != null && imageBytes.value!.isNotEmpty) {
+        Reference ref = FirebaseStorage.instance
+            .ref()
+            .child('/Turnamen')
+            .child(DateTime.now().microsecondsSinceEpoch.toString() + ".png");
+        await ref.putData(imageData);
+        String downloadURL = await ref.getDownloadURL();
+        link.value = downloadURL;
+      } else {
+        statusupload.value = false;
+        throw Exception('No Image');
+      }
+    } catch (e) {
+      Get.snackbar("Gagal", "Gambar Gagal Di Upload",
+          backgroundColor: Colors.red);
+    }
+  }
+
+  Future<void> pickImage() async {
+    final FileUploadInputElement input = FileUploadInputElement();
+    input..accept = 'image/*';
+    input.click();
+    input.onChange.listen((e) {
+      final File file = input.files!.first;
+      final FileReader reader = FileReader();
+
+      reader.onLoadEnd.listen((e) {
+        imageBytes.value = reader.result as Uint8List?;
+      });
+
+      reader.readAsArrayBuffer(file);
+    });
+    update();
   }
 }

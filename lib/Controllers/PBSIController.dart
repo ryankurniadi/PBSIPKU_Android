@@ -24,8 +24,11 @@ class PBSIController extends GetxController {
           dataPBSI.add(
               PBSI(nama: docSnap.docs[i].data().nama, id: docSnap.docs[i].id));
         }
-        update();
+      } else {
+        totalPBSI.value = 0;
+        dataPBSI.clear();
       }
+      update();
     } catch (e) {
       print(e);
     }
