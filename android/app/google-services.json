@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "727190803314",
+    "project_id": "pbsi-pku",
+    "storage_bucket": "pbsi-pku.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727190803314:android:f072e3250d8f516e6dc3eb",
+        "android_client_info": {
+          "package_name": "com.usr.pbsipku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5Pw5zRXaCem3yG9cAUt0piRykMl0G620"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
