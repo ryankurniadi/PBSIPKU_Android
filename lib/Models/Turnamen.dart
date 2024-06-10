@@ -8,8 +8,9 @@ class Turnamen{
   final String? ket;
   final String? level;
   final DateTime? date;
+  final DateTime? batas;
 
-  Turnamen({this.id, this.nama, this.img, this.ket, this.status, this.date, this.level});
+  Turnamen({this.id, this.nama, this.img, this.ket, this.status, this.date, this.level, this.batas});
 
   factory Turnamen.fromFirestore(
     DocumentSnapshot<Map<String,dynamic>> snapshot,
@@ -24,6 +25,7 @@ class Turnamen{
       ket: data?["ket"],
       level: data?["level"],
       date: data?["date"].toDate(),
+      batas: data?["batas"].toDate(),
     );
   }
 
@@ -35,6 +37,7 @@ class Turnamen{
       if(img != null) 'img':img,
       if(status != null) 'status':status,
       if(date != null) 'date':date,
+      if(batas != null) 'batas':batas,
       if(level != null) 'level':level,
     };
   }

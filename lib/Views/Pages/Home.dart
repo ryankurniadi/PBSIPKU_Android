@@ -7,7 +7,7 @@ import '../../Controllers/PBSIController.dart';
 
 class Home extends StatelessWidget {
   Home({super.key});
-  final pbsiC = Get.put(PBSIController());
+  final pbsiC =  Get.put(PBSIController());
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+
 import '../Models/Turnamen.dart';
+import './LoadingController.dart';
+
 
 class TurnamenController extends GetxController {
   final db = FirebaseFirestore.instance;
@@ -23,17 +26,23 @@ class TurnamenController extends GetxController {
   var totalTur = 0.obs;
   var dataTurnamen = [].obs;
   var date = DateTime.now().obs;
+  var date2 = DateTime.now().obs;
   var dateShow = "".obs;
+  var dateShow2 = "".obs;
   var statusupload = true.obs;
+
+  final loadC = Get.find<LoadingController>();
 
   @override
   void onInit() {
     getData();
     showDate(DateTime.now());
+    showDate2(DateTime.now());
     super.onInit();
   }
 
   getData() async {
+    ket.value = "";
     final ref = db.collection(table).withConverter(
         fromFirestore: Turnamen.fromFirestore,
         toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
@@ -51,6 +60,7 @@ class TurnamenController extends GetxController {
             status: docSnap.docs[i].data().status,
             date: docSnap.docs[i].data().date,
             level: docSnap.docs[i].data().level,
+            batas: docSnap.docs[i].data().batas,
           ));
         }
       } else {
@@ -81,18 +91,21 @@ class TurnamenController extends GetxController {
           ket: ket.value,
           level: level.value,
           img: link.value,
+          batas: date2.value,
         ),
       );
-
+      loadC.changeLoading(false);
       Get.back();
       Get.snackbar("Berhasil", "Data Berhasil Di tambah",
           backgroundColor: Colors.green);
       await getData();
       imageBytes.value = Uint8List(0);
     } catch (e) {
+      loadC.changeLoading(false);
       Get.snackbar("Gagal", "Data Gagal Di Tambah",
           backgroundColor: Colors.red);
     }
+    
   }
 
   void deleteData(String id, String img) async {
@@ -114,9 +127,18 @@ class TurnamenController extends GetxController {
     showDate(tgl);
     update();
   }
+  void setDate2(DateTime tgl) {
+    date2.value = tgl;
+    showDate2(tgl);
+    update();
+  }
 
   void showDate(DateTime tgl) {
     dateShow.value = "${DateFormat("EEEE, dd MMMM yyyy", "id").format(tgl)}";
+    update();
+  }
+  void showDate2(DateTime tgl) {
+    dateShow2.value = "${DateFormat("EEEE, dd MMMM yyyy", "id").format(tgl)}";
     update();
   }
 

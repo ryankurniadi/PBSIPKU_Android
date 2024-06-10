@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:pbsipku/firebase_options.dart';
 
 import './Routes/PageRoutes.dart';
-import './Views/Pages/Home.dart';
+import './Views/Pages/InitialPage.dart';
+import './Bindings/HomeBinding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      initialBinding: HomeBinding(),
+      home: Initialpage(),
       transitionDuration: Duration.zero,
       defaultTransition: Transition.noTransition,
       getPages: PageRoutes.Pages,

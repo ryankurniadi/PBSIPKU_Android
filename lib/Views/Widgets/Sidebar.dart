@@ -48,6 +48,14 @@ class Sidebar extends StatelessWidget {
           title: const Text("Blank Page"),
           leading: const Icon(Icons.paste, size: 20,),
         ),
+        ListTile(
+          onTap: () {
+            Get.back();
+            Get.toNamed(PageNames.Login);
+          },
+          title: const Text("Login"),
+          leading: const Icon(Icons.paste, size: 20,),
+        ),
       ],
     ));
   }
