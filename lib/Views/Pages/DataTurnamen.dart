@@ -17,7 +17,7 @@ class DataTurnamen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: const NavBar(title: "Data Turnamen Kota Pekanbaru"),
-        drawer: const Sidebar(),
+        //drawer: const Sidebar(),
         body: ListView(
           shrinkWrap: true,
           children: [

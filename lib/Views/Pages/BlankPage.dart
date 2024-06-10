@@ -10,7 +10,7 @@ class BlankPage extends StatelessWidget {
     return const SafeArea(
         child: Scaffold(
           appBar: NavBar(title: "Blank Page"),
-      drawer: Sidebar(),
+      //drawer: Sidebar(),
     ));
   }
 }

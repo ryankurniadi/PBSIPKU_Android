@@ -11,6 +11,7 @@ class NavBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
+      elevation: 2,
       actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.logout))],
     );
   }

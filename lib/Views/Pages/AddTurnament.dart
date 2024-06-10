@@ -57,7 +57,7 @@ class AddTurnamner extends StatelessWidget {
       appBar: const NavBar(title: "Tambah Turnamen"),
       body: GetBuilder<TurnamenController>(builder: (turC) {
         return LoadingBarrier(
-          child:  ListView(
+            child: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 100),
@@ -163,33 +163,38 @@ class AddTurnamner extends StatelessWidget {
                       if (inputC.isHide.value) {
                         return const SizedBox();
                       } else {
-                        return HtmlEditor(
-                          controller: controller,
-                          htmlEditorOptions:  HtmlEditorOptions(
+                        return Container(
+                          color: Colors.grey.shade200,
+                          child: HtmlEditor(
+                            controller: controller,
+                            htmlEditorOptions: HtmlEditorOptions(
                               hint: "Masukan Keterangan",
                               initialText: turC.ket.value,
                               characterLimit: 1000,
                               autoAdjustHeight: true,
-                              ),
-                          htmlToolbarOptions: const HtmlToolbarOptions(
-                              allowImagePicking: false,
-                              defaultToolbarButtons: [
-                                FontButtons(
-                                    clearAll: false,
-                                    strikethrough: false,
-                                    subscript: false,
-                                    superscript: false),
-                                ColorButtons(),
-                                ParagraphButtons(
-                                    textDirection: false,
-                                    lineHeight: false,
-                                    decreaseIndent: false,
-                                    increaseIndent: false,
-                                    caseConverter: false),
-                                ListButtons(listStyles: false),
-                              ]),
-                          otherOptions: const OtherOptions(
-                            height: 250,
+                            ),
+                            htmlToolbarOptions: const HtmlToolbarOptions(
+                                gridViewHorizontalSpacing: 2,
+                                toolbarType: ToolbarType.nativeGrid,
+                                allowImagePicking: false,
+                                defaultToolbarButtons: [
+                                  FontButtons(
+                                      clearAll: false,
+                                      strikethrough: false,
+                                      subscript: false,
+                                      superscript: false),
+                                  ColorButtons(),
+                                  ParagraphButtons(
+                                      textDirection: false,
+                                      lineHeight: false,
+                                      decreaseIndent: false,
+                                      increaseIndent: false,
+                                      caseConverter: false),
+                                  ListButtons(listStyles: false),
+                                ]),
+                            otherOptions: const OtherOptions(
+                              height: 250,
+                            ),
                           ),
                         );
                       }
@@ -257,8 +262,8 @@ class AddTurnamner extends StatelessWidget {
               ),
             ),
           ],
-        )
-        ); }),
+        ));
+      }),
     ));
   }
 }
