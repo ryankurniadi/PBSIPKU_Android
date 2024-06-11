@@ -11,6 +11,7 @@ class AnggotaController extends GetxController {
    final loadC = Get.find<LoadingController>();
   final db = FirebaseFirestore.instance;
   var pbsi = ''.obs;
+  var pbsinama = ''.obs;
   var dataUser = [].obs;
   var totalUser = 0.obs;
 
@@ -26,11 +27,14 @@ class AnggotaController extends GetxController {
   var skill = "Level D".obs;
   var hp = 0.obs;
 
-  getAnggotaPBSI(String namaPBSI) async {
+  getAnggotaPBSI(String namaPBSI, String DisplayPBSI) async {
     pbsi.value = namaPBSI;
+    pbsinama.value = DisplayPBSI;
     final ref = db.collection("users").withConverter(
         fromFirestore: User.fromFirestore,
         toFirestore: (User user, _) => user.toFirestore());
+
+
 
     try {
       final docSnap = await ref
@@ -97,7 +101,7 @@ class AnggotaController extends GetxController {
           "username": "null",
         };
         await db.collection("userlogs").add(userlog);
-        getAnggotaPBSI(pbsi.value);
+        getAnggotaPBSI(pbsi.value, pbsinama.value);
         loadC.changeLoading(false);
         Get.back();
         Get.snackbar("Berhasil", "Data Berhasil Di tambah",
@@ -113,7 +117,7 @@ class AnggotaController extends GetxController {
     deleteUser(String id, String emails) async {
     try {
       await db.collection('users').doc(id).delete();
-      getAnggotaPBSI(pbsi.value);
+      getAnggotaPBSI(pbsi.value, pbsinama.value);
             final log = await db
           .collection('userlogs')
           .where('email'.toString().toLowerCase(),
@@ -133,7 +137,7 @@ class AnggotaController extends GetxController {
 
   @override
   void onInit() {
-    getAnggotaPBSI(authC.authpbsi.value);
+    getAnggotaPBSI(authC.authpbsi.value, authC.authpbsinama.value);
     super.onInit();
   }
 }

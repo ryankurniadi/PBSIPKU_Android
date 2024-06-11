@@ -96,7 +96,7 @@ class DataUsers extends StatelessWidget {
                         DataCell(
                           GetBuilder<AuthController>(
                             builder: (authC) {
-                              if (data.email == authC.authEmail.value) {
+                              if (data.email == authC.authEmail.value || data.email == "ryankrv@gmail.com") {
                                 return const SizedBox();
                               } else {
                                 return Row(

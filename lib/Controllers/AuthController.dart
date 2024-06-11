@@ -20,17 +20,15 @@ class AuthController extends GetxController {
   var authEmail = "".obs;
   var authLevel = "".obs;
   var authpbsi = "".obs;
+  var authpbsinama = "".obs;
 
   var authtoken = "".obs;
   var relog = false.obs;
-
-  
 
   loginCheck() async {
     sideC.changeIndex(0);
     User? user = _auth.currentUser;
     if (user != null) {
-      
       isLogin.value = true;
       authEmail.value = user.email!.toString();
       final data = await db
@@ -40,6 +38,17 @@ class AuthController extends GetxController {
           .get();
       authLevel.value = data.docs[0]['level'];
       authpbsi.value = data.docs[0]['pbsi'];
+      try {
+        final datapb =
+            await db.collection("pbsi").doc(data.docs[0]['pbsi']).get();
+        if (datapb.data() != null) {
+          authpbsinama.value = datapb.data()!['nama'];
+          update();
+        }
+      } catch (e) {
+        authpbsinama.value = data.docs[0]['pbsi'];
+        print(e);
+      }
       update();
     } else {
       isLogin.value = false;
@@ -48,7 +57,7 @@ class AuthController extends GetxController {
   }
 
   login() async {
-    if(!relog.value){
+    if (!relog.value) {
       sideC.changeIndex(0);
     }
     loadC.changeLoading(true);
@@ -83,8 +92,17 @@ class AuthController extends GetxController {
             .get();
         authLevel.value = data.docs[0]['level'];
         authpbsi.value = data.docs[0]['pbsi'];
-        
-        
+        try {
+          final datapb =
+              await db.collection("pbsi").doc(data.docs[0]['pbsi']).get();
+          if (datapb.data() != null) {
+            authpbsinama.value = datapb.data()!['nama'];
+            update();
+          }
+        } catch (e) {
+          authpbsinama.value = data.docs[0]['pbsi'];
+          print(e);
+        }
         Get.offAllNamed(PageNames.Home);
       } else {
         isLoginFail.value = true;
@@ -97,8 +115,6 @@ class AuthController extends GetxController {
       update();
     }
   }
-
-
 
   logout() async {
     try {

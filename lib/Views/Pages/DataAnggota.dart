@@ -16,7 +16,7 @@ class DataAnggota extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: NavBar(title: "Data Anggota ${anggotaC.pbsi}"),
+        appBar: NavBar(title: "Data Anggota ${anggotaC.pbsinama}"),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           child: Column(

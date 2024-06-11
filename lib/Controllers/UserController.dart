@@ -95,6 +95,8 @@ class UserController extends GetxController {
         await db.collection("userlogs").add(userlog);
         getUserData();
         loadC.changeLoading(false);
+        pbsi.value = "";
+        level.value = "";
         Get.back();
         Get.snackbar("Berhasil", "Data Berhasil Di tambah",
             backgroundColor: Colors.green);

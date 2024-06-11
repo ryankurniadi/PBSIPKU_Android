@@ -105,7 +105,7 @@ class AddUser extends StatelessWidget {
                                     items: List<DropdownMenuItem>.generate(pbsiC.totalPBSI.value, (index) {
                                       PBSI data = pbsiC.dataPBSI[index];
                                       return DropdownMenuItem(
-                                        value: "${data.nama}",
+                                        value: "${data.id}",
                                         child: Text("${data.nama}"),
                                       );
                                     }),

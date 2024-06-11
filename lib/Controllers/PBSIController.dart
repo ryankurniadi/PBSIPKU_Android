@@ -77,6 +77,21 @@ class PBSIController extends GetxController {
     }
   }
 
+  getId()async{
+        final ref = db.collection("pbsi").withConverter(
+        fromFirestore: PBSI.fromFirestore,
+        toFirestore: (PBSI pbsi, _) => pbsi.toFirestore());
+        
+        final snap = await ref.where('nama', isEqualTo: "PB PANAM JAYA").get();
+        if(snap.docs.isNotEmpty){
+          PBSI dat = snap.docs[0].data();
+          //print(dat.id);
+          final use = await db.collection('pbsi').doc(dat.id).get();
+          //print(use.data()!['nama']);
+        }
+
+  }
+
   @override
   void onInit() {
     getData();

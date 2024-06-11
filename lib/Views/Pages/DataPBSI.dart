@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../Widgets/NavBar.dart';
 import '../../Routes/PageNames.dart';
 import '../../Models/PBSI.dart';
+import '../Widgets/TabelPBSI.dart';
 import '../../Controllers/PBSIController.dart';
 
 class DataPBSI extends StatelessWidget {
@@ -36,14 +37,23 @@ class DataPBSI extends StatelessWidget {
                             end: Alignment.topRight,
                           ),
                           borderRadius: BorderRadius.circular(10)),
-                      child: const Center(child: Row(
+                      child: const Center(
+                          child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.add, color: Colors.white,),
-                          SizedBox(width: 10,),
-                          Text("TAMBAH DATA", style: TextStyle(color: Colors.white),),
+                          Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "TAMBAH DATA",
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ],
                       )))),
             ],
@@ -54,56 +64,17 @@ class DataPBSI extends StatelessWidget {
           GetBuilder<PBSIController>(
             builder: (pbsiC) {
               if (pbsiC.totalPBSI > 0) {
-                return ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: pbsiC.totalPBSI.value,
-                  itemBuilder: (context, index) {
-                    PBSI data = pbsiC.dataPBSI[index];
-                    return ListTile(
-                      onTap: () {},
-                      title: Text("${data.nama}"),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                Get.toNamed(PageNames.EditPBSI);
-                                pbsiC.id.value = "${data.id}";
-                                pbsiC.nama.value = "${data.nama}";
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                size: 20,
-                              )),
-                          IconButton(
-                              onPressed: () {
-                                Get.defaultDialog(
-                                    title: "Konfirmasi Hapus",
-                                    content: Text(
-                                        "Apakah kamu yakin untuk menghapus data ${data.nama}?"),
-                                    barrierDismissible: false,
-                                    cancel: TextButton(
-                                        onPressed: () {
-                                          Get.back();
-                                        },
-                                        child: const Text("Tidak")),
-                                    confirm: TextButton(
-                                        onPressed: () {
-                                          if (!Get.isSnackbarOpen) {
-                                            pbsiC.deleteData("${data.id}");
-                                          }
-                                        },
-                                        child: const Text("Iya")));
-                              },
-                              icon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                              ))
-                        ],
-                      ),
-                    );
-                  },
+                return PaginatedDataTable(
+                  source: PBSISource(context),
+                  header: const Text("Data PBSI Kota Pekanbaru"),
+                  rowsPerPage: (pbsiC.totalPBSI.value >= 7 ? 7 : pbsiC.totalPBSI.value),
+                  showFirstLastButtons: true,
+                  showEmptyRows: false,
+                  
+                  columns: const [
+                    DataColumn(label: Text('Nama PBSI')),
+                    DataColumn(label: Text('Aksi')),
+                  ],
                 );
               } else {
                 return const Text("No Data");
