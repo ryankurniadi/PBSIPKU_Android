@@ -54,7 +54,7 @@ class AddTurnamner extends StatelessWidget {
     var prev = turC.imageBytes;
     return SafeArea(
         child: Scaffold(
-      appBar: const NavBar(title: "Tambah Turnamen"),
+      appBar: NavBar(title: "Tambah Turnamen"),
       body: GetBuilder<TurnamenController>(builder: (turC) {
         return LoadingBarrier(
             child: ListView(
@@ -89,20 +89,20 @@ class AddTurnamner extends StatelessWidget {
                     DropdownButtonFormField(
                       items: const [
                         DropdownMenuItem(
-                          child: Text("Level A"),
                           value: "Level A",
+                          child: Text("Level A"),
                         ),
                         DropdownMenuItem(
-                          child: Text("Level B"),
                           value: "Level B",
+                          child: Text("Level B"),
                         ),
                         DropdownMenuItem(
-                          child: Text("Level C"),
                           value: "Level C",
+                          child: Text("Level C"),
                         ),
                         DropdownMenuItem(
-                          child: Text("Level D"),
                           value: "Level D",
+                          child: Text("Level D"),
                         )
                       ],
                       value: "Level A",

@@ -5,6 +5,7 @@ import '../Pages/BlankPage.dart';
 import '../Pages/DataPBSI.dart';
 import '../Pages/DataTurnamen.dart';
 import '../Pages/DataBerita.dart';
+import '../Pages/DataUsers.dart';
 
 class NewSideBar extends StatelessWidget {
   NewSideBar({super.key, required this.index});
@@ -22,6 +23,8 @@ class NewSideBar extends StatelessWidget {
       case 3:
         return DataBerita();
       case 4:
+        return DataUsers();
+      case 5:
         return const BlankPage();
       default: 
         return Beranda();

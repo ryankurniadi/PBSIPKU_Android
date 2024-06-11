@@ -14,7 +14,7 @@ class DataPBSI extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: const NavBar(title: "Data PBSI Pekanbaru"),
+      appBar: NavBar(title: "Data PBSI Pekanbaru"),
       body: ListView(
         shrinkWrap: true,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),

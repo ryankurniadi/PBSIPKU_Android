@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 
 import './Home.dart';
 import './LoginPage.dart';
-import '../../Routes/PageNames.dart';
 import '../../Controllers/AuthController.dart';
+import '../../Controllers/LoadingController.dart';
 
 class Initialpage extends StatelessWidget {
   Initialpage({super.key});
+  final loadC = Get.put(LoadingController());
   final authC = Get.put(AuthController());
 
   @override

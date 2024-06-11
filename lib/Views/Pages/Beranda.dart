@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../Widgets/NavBar.dart';
 import '../Widgets/StatisticBeranda.dart';
 import '../../Controllers/PBSIController.dart';
+import '../../Controllers/UserController.dart';
 import '../../Controllers/TurnamenContoller.dart';
 
 class Beranda extends StatelessWidget {
@@ -56,16 +57,20 @@ class Beranda extends StatelessWidget {
                 const SizedBox(
                   width: 15,
                 ),
-                StatisticBeranda(
-                  totalData: 0,
-                  namaData: "Data Users",
-                  icon: Icons.person,
-                  gradien: const LinearGradient(
-                    colors: [Color(0xfffdc830), Color(0xfff37335)],
-                    stops: [0, 1],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                  ),
+                GetBuilder<UserController>(
+                  builder: (userC) {
+                    return StatisticBeranda(
+                      totalData: userC.totalUser.value,
+                      namaData: "Data Users",
+                      icon: Icons.person,
+                      gradien: const LinearGradient(
+                        colors: [Color(0xfffdc830), Color(0xfff37335)],
+                        stops: [0, 1],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                      ),
+                    );
+                  }
                 ),
               ],
             ),

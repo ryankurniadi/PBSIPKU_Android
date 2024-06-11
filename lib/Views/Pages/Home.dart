@@ -67,6 +67,9 @@ class _HomeState extends State<Home> {
                       icon: Icon(Icons.newspaper), label: Text("Berita")
                       ),
                     NavigationRailDestination(
+                      icon: Icon(Icons.person), label: Text("Users")
+                      ),
+                    NavigationRailDestination(
                       icon: Icon(Icons.paste), label: Text("Blank")
                       ),
                   ],

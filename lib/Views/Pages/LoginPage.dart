@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../../Routes/PageNames.dart';
+
+import '../Widgets/LoadingBarrier.dart';
 import '../../Controllers/AuthController.dart';
 
 class LoginPage extends StatelessWidget {
@@ -10,81 +12,129 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return SafeArea(child: GetBuilder<AuthController>(builder: (authC) {
+      return LoadingBarrier(
         child: Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text("LOGIN PBSI PEKANBARU"),
-            SizedBox(
-              height: 20,
-            ),
-            GetBuilder<AuthController>(builder: (authC) {
-              return Form(
-                child: Column(
-                  children: [
-                    Card(
-                      margin: EdgeInsets.symmetric(horizontal: Get.width / 3),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 40),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "Username/E-mail",
-                                prefixIcon: Icon(Icons.person),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      20.0), // Melengkungkan border
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            TextFormField(
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                hintText: "Password",
-                                prefixIcon: Icon(Icons.lock),
-                                filled: true,
-                                fillColor: Colors.grey[200],
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      20.0), // Melengkungkan border
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(
-                      width: Get.width / 3,
-                      height: 60,
-                      child: ElevatedButton(
-                          style: ButtonStyle(),
-                          onPressed: () {
-                            authC.loginCheck();
-                            if (authC.isLogin.value) {
-                              Get.offAllNamed(PageNames.Home);
-                            }
-                          },
-                          child: Text("LOGIN")),
-                    )
-                  ],
+          body: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text("LOGIN PBSI PEKANBARU"),
+                const SizedBox(
+                  height: 20,
                 ),
-              );
-            }),
-          ],
+                GetBuilder<AuthController>(builder: (authC) {
+                  return Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Card(
+                          margin: EdgeInsets.symmetric(horizontal: Get.width / 3),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 80, vertical: 40),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextFormField(
+                                    controller: TextEditingController(),
+                                    keyboardType: TextInputType.emailAddress,
+                                    decoration: InputDecoration(
+                                      hintText: "E-mail/Username",
+                                      prefixIcon: const Icon(Icons.person),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            20.0), // Melengkungkan border
+                                      ),
+                                    ),
+                                    onSaved: (value) {
+                                      authC.email.value = value!;
+                                    },
+                                    onFieldSubmitted: (value) {
+                                      if (_formKey.currentState!.validate()) {
+                                        _formKey.currentState!.save();
+                                        authC.login();
+                                      }
+                                    },
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "E-Mail Wajib Di Isi";
+                                      }
+                                      if(value.length < 6 ){
+                                        return "Username Terlalu Pendek";
+                                      }
+                                    }),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                TextFormField(
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    hintText: "Password",
+                                    prefixIcon: const Icon(Icons.lock),
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20.0), // Melengkungkan border
+                                    ),
+                                  ),
+                                  onSaved: (value) {
+                                    authC.password.value = value!;
+                                  },
+                                  onFieldSubmitted: (value) {
+                                    if (_formKey.currentState!.validate()) {
+                                      _formKey.currentState!.save();
+                                      authC.login();
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Password Wajib Di Isi";
+                                    }
+                                  },
+                                ),
+                                if (authC.isLoginFail.value)
+                                  const Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "username atau password salah",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: Get.width / 3,
+                          height: 60,
+                          child: ElevatedButton(
+                              // style: ButtonStyle(),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  authC.login();
+                                }
+                              },
+                              child: const Text("LOGIN")),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ),
         ),
-      ),
-    ));
+      );
+    }));
   }
 }

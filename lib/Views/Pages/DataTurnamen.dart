@@ -16,7 +16,7 @@ class DataTurnamen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const NavBar(title: "Data Turnamen Kota Pekanbaru"),
+        appBar: NavBar(title: "Data Turnamen Kota Pekanbaru"),
         //drawer: const Sidebar(),
         body: ListView(
           shrinkWrap: true,

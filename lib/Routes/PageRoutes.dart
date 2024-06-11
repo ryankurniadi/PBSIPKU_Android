@@ -21,6 +21,8 @@ import '../Views/Pages/DataTurnamen.dart';
 
 import '../Views/Pages/DataBerita.dart';
 
+import '../Views/Pages/DataUsers.dart';
+import '../Views/Pages/AddUser.dart';
 
 class PageRoutes {
   static final Pages = [
@@ -51,6 +53,7 @@ class PageRoutes {
       page: ()=>LoginPage()),
     GetPage(
       name: PageNames.Init, 
+      binding: HomeBinding(),
       page: ()=>Initialpage()),
 
     //PBSI
@@ -94,5 +97,19 @@ class PageRoutes {
         AuthMiddleware(),
       ],
       page: ()=>DataBerita()),
+
+    //Users  
+    GetPage(
+      name: PageNames.DataUser, 
+      middlewares: [
+        AuthMiddleware(),
+      ],
+      page: ()=>DataUsers()),
+    GetPage(
+      name: PageNames.AddUser, 
+      middlewares: [
+        AuthMiddleware(),
+      ],
+      page: ()=>AddUser()),
   ];
 }

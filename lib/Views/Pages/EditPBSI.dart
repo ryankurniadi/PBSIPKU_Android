@@ -13,7 +13,7 @@ class EditPBSI extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const NavBar(title: "Data PBSI Pekanbaru",),
+        appBar:  NavBar(title: "Data PBSI Pekanbaru",),
         body: ListView(
           children: [
             const Center(
