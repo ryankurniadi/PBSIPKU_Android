@@ -7,4 +7,10 @@ class SidebarController extends GetxController{
     index.value = idx;
     update();
   }
+
+  @override
+  void onInit() {
+    changeIndex(0);
+    super.onInit();
+  }
 }

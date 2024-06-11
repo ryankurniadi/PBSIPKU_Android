@@ -1,28 +1,25 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:email_validator/email_validator.dart';
 
-
-import '../Widgets/NavBar.dart';
-import '../../Models/PBSI.dart';
-import '../../Controllers/UserController.dart';
-import '../../Controllers/PBSIController.dart';
+import '../../Controllers/AnggotaController.dart';
 import '../../Controllers/LoadingController.dart';
+import '../Widgets/NavBar.dart';
 
 
-class AddUser extends StatelessWidget {
-  AddUser({super.key});
+class AddAnggota extends StatelessWidget {
+  AddAnggota({super.key});
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+   return Scaffold(
       appBar: NavBar(title: "Add User"),
       body: GetBuilder<LoadingController>(
         builder: (loadC) {
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: GetBuilder<UserController>(builder: (userC) {
+            child: GetBuilder<AnggotaController>(builder: (userC) {
               return Form(
                 key: _formKey,
                 child: Column(
@@ -60,70 +57,44 @@ class AddUser extends StatelessWidget {
                     ),
                     const SizedBox(
                       height: 5,
-                    ),
-                    const Row(
+                    ),const Row(
                       children: [
-                        Text('Level User'),
+                        Text("Level Pemain"),
                       ],
                     ),
                     DropdownButtonFormField(
-                      value: "Root",
-                      onChanged: (value) {
-                        userC.level.value = value!;
-                        if (value! == "Admin PBSI") {
-                          userC.levelUserChanger(false);
-                        } else {
-                          userC.levelUserChanger(true);
-                        }
-                      },
                       items: const [
                         DropdownMenuItem(
-                          value: "Root",
-                          child: Text("Admin Sistem/Root"),
+                          value: "Level A",
+                          child: Text("Level A"),
                         ),
                         DropdownMenuItem(
-                          value: "Admin PBSI",
-                          child: Text("Admin PBSI"),
+                          value: "Level B",
+                          child: Text("Level B"),
                         ),
+                        DropdownMenuItem(
+                          value: "Level C",
+                          child: Text("Level C"),
+                        ),
+                        DropdownMenuItem(
+                          value: "Level D",
+                          child: Text("Level D"),
+                        )
                       ],
+                      value: "Level D",
+                      onChanged: (value) {
+                        userC.skill.value = value!;
+                      },
                     ),
-                    (!userC.isRoot.value
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Text("Pilih PBSI"),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              GetBuilder<PBSIController>(
-                                builder: (pbsiC) {
-                                  return DropdownButtonFormField(
-                                    hint: const Text("Pilih PBSI"),
-                                    onChanged: (value) {
-                                      userC.pbsi.value = value!;
-                                    },
-                                    items: List<DropdownMenuItem>.generate(pbsiC.totalPBSI.value, (index) {
-                                      PBSI data = pbsiC.dataPBSI[index];
-                                      return DropdownMenuItem(
-                                        value: "${data.nama}",
-                                        child: Text("${data.nama}"),
-                                      );
-                                    }),
-                                  );
-                                }
-                              ),
-                            ],
-                          )
-                        : const SizedBox()),
                     const SizedBox(
                       height: 5,
                     ),
                     ElevatedButton(onPressed: () {
                       if(_formKey.currentState!.validate()){
                         _formKey.currentState!.save();
-                        userC.addUser();
+                        userC.addAnggota();
                       }
-                    }, child: const Text("Tambah User")),
+                    }, child: const Text("Tambah Anggota")),
                   ],
                 ),
               );

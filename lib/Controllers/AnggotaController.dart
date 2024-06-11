@@ -6,17 +6,16 @@ import '../Models/User.dart';
 import './AuthController.dart';
 import './LoadingController.dart';
 
-class UserController extends GetxController {
-  final db = FirebaseFirestore.instance;
+class AnggotaController extends GetxController {
   final authC = Get.find<AuthController>();
-  final loadC = Get.find<LoadingController>();
-  String tabel = "users";
-
+   final loadC = Get.find<LoadingController>();
+  final db = FirebaseFirestore.instance;
+  var pbsi = ''.obs;
   var dataUser = [].obs;
   var totalUser = 0.obs;
 
-  //data imputan
-  var defaultimg =
+
+    var defaultimg =
       "https://firebasestorage.googleapis.com/v0/b/pbsi-pku.appspot.com/o/Users%2Fdefault.png?alt=media&token=640e9911-8829-4370-9a0c-227496d07284";
   var nama = "".obs;
   var level = "".obs;
@@ -24,18 +23,19 @@ class UserController extends GetxController {
   var email = "".obs;
   var isActive = false.obs;
   var isPickUsername = false.obs;
-  var pbsi = "".obs;
   var skill = "Level D".obs;
   var hp = 0.obs;
 
-  var isRoot = true.obs;
-
-  getUserData() async {
+  getAnggotaPBSI(String namaPBSI) async {
+    pbsi.value = namaPBSI;
     final ref = db.collection("users").withConverter(
         fromFirestore: User.fromFirestore,
         toFirestore: (User user, _) => user.toFirestore());
+
     try {
-      final docSnap = await ref.orderBy('nama').get();
+      final docSnap = await ref
+          .where('pbsi'.toString().toLowerCase(), isEqualTo: namaPBSI).orderBy('level')
+          .get();
       if (docSnap.docs.isNotEmpty) {
         totalUser.value = docSnap.docs.length;
         dataUser.clear();
@@ -59,11 +59,15 @@ class UserController extends GetxController {
         dataUser.clear();
       }
       update();
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
-  addUser() async {
-    loadC.changeLoading(true);
+
+  addAnggota()async{
+
+  loadC.changeLoading(true);
     final _user = User(
       nama: nama.value,
       img: defaultimg,
@@ -72,7 +76,7 @@ class UserController extends GetxController {
       hp: hp.value,
       isActive: isActive.value,
       isPickUsername: isPickUsername.value,
-      level: level.value,
+      level: "Anggota PBSI",
       pbsi: pbsi.value,
       skill: skill.value,
     );
@@ -93,7 +97,7 @@ class UserController extends GetxController {
           "username": "null",
         };
         await db.collection("userlogs").add(userlog);
-        getUserData();
+        getAnggotaPBSI(pbsi.value);
         loadC.changeLoading(false);
         Get.back();
         Get.snackbar("Berhasil", "Data Berhasil Di tambah",
@@ -106,21 +110,18 @@ class UserController extends GetxController {
     }
   }
 
-  deleteUser(String id, String emails) async {
+    deleteUser(String id, String emails) async {
     try {
       await db.collection('users').doc(id).delete();
-      final log = await db
+      getAnggotaPBSI(pbsi.value);
+            final log = await db
           .collection('userlogs')
           .where('email'.toString().toLowerCase(),
               isEqualTo: emails.toLowerCase())
           .get();
-      
       log.docs.forEach((doc) {
-        //print(doc.id);
         doc.reference.delete();
       });
-      
-      getUserData();
       Get.back();
       Get.snackbar("Berhasil", "Data Berhasil Di Hapus",
           backgroundColor: Colors.green);
@@ -129,15 +130,10 @@ class UserController extends GetxController {
     }
   }
 
-  levelUserChanger(bool value) {
-    isRoot.value = value;
-    update();
-  }
 
   @override
   void onInit() {
-    getUserData();
-
+    getAnggotaPBSI(authC.authpbsi.value);
     super.onInit();
   }
 }

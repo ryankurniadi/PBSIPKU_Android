@@ -24,4 +24,9 @@ abstract class PageNames{
   static const DataUser = '/Data-Users';
   static const AddUser = '/Add-Users';
   static const EditUser = '/Edit-Users';
+
+
+  //Manajemen PBSI
+  static const DataAnggota = '/Data-Anggota';
+  static const AddAnggota = '/Add-Anggota';
 }

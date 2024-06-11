@@ -11,10 +11,11 @@ class HomeBinding extends Bindings {
   @override
   void dependencies() {
     Get.put(LoadingController());
+    Get.put(SidebarController());
     Get.put(AuthController());
     Get.put(UserController());
     Get.put(PBSIController());
     Get.put(TurnamenController());
-    Get.put(SidebarController());
+    
   }
 }

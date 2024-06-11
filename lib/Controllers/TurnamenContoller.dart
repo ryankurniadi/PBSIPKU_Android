@@ -24,6 +24,7 @@ class TurnamenController extends GetxController {
   var status = "".obs;
   var table = 'turnamen';
   var totalTur = 0.obs;
+  var pbsi = "".obs;
   var dataTurnamen = [].obs;
   var date = DateTime.now().obs;
   var date2 = DateTime.now().obs;
@@ -61,6 +62,7 @@ class TurnamenController extends GetxController {
             date: docSnap.docs[i].data().date,
             level: docSnap.docs[i].data().level,
             batas: docSnap.docs[i].data().batas,
+            pbsi: docSnap.docs[i].data().pbsi,
           ));
         }
       } else {
@@ -87,10 +89,11 @@ class TurnamenController extends GetxController {
         Turnamen(
           nama: nama.value,
           date: date.value,
-          status: "Publish",
+          status: "Disetujui",
           ket: ket.value,
           level: level.value,
           img: link.value,
+          pbsi: pbsi.value,
           batas: date2.value,
         ),
       );

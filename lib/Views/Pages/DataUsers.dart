@@ -6,10 +6,11 @@ import '../Widgets/NavBar.dart';
 import '../../Routes/PageNames.dart';
 import '../../Models/User.dart';
 import '../../Controllers/UserController.dart';
+import '../../Controllers/AuthController.dart';
 
 class DataUsers extends StatelessWidget {
   DataUsers({super.key});
-
+  final userC = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +27,7 @@ class DataUsers extends StatelessWidget {
                 InkWell(
                     onTap: () {
                       Get.toNamed(PageNames.AddUser);
+                      userC.isRoot.value = true;
                     },
                     child: Container(
                         width: 200,
@@ -67,10 +69,7 @@ class DataUsers extends StatelessWidget {
                 return Expanded(
                   child: DataTable2(
                     columnSpacing: 1,
-
-                    border: TableBorder(
-
-                    ),
+                    border: const TableBorder(),
                     columns: const [
                       DataColumn(label: Text('Nama')),
                       DataColumn(label: Text('Username')),
@@ -94,30 +93,42 @@ class DataUsers extends StatelessWidget {
                         DataCell(
                           Text("${data.pbsi}"),
                         ),
-                        DataCell(Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            InkWell(
-                                onTap: () {},
-                                child: const Row(
+                        DataCell(
+                          GetBuilder<AuthController>(
+                            builder: (authC) {
+                              if (data.email == authC.authEmail.value) {
+                                return const SizedBox();
+                              } else {
+                                return Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.key),
-                                    Text("Reset Password")
+                                    InkWell(
+                                        onTap: () {},
+                                        child: const Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Icon(Icons.key),
+                                            Text("Reset Password")
+                                          ],
+                                        )),
+                                    IconButton(
+                                        onPressed: () {},
+                                        icon: const Icon(Icons.edit)),
+                                    IconButton(
+                                        onPressed: () {
+                                          userC.deleteUser(data.id!, data.email!);
+                                        },
+                                        icon: const Icon(Icons.delete)),
                                   ],
-                                )),
-                            IconButton(
-                                onPressed: () {}, icon: const Icon(Icons.edit)),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.delete)),
-                          ],
-                        )),
+                                );
+                              }
+                            },
+                          ),
+                        ),
                       ]);
                     }),
                   ),
                 );
-
               },
             ),
           ],

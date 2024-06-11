@@ -4,30 +4,53 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import './LoadingController.dart';
 import '../Routes/PageNames.dart';
+import '../Controllers/SidebarContoller.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore db = FirebaseFirestore.instance;
   final loadC = Get.find<LoadingController>();
+  final sideC = Get.find<SidebarController>();
   var isLogin = false.obs;
   var email = "".obs;
   var password = "".obs;
   var isLoginFail = false.obs;
+  var isRegFail = false.obs;
 
   var authEmail = "".obs;
+  var authLevel = "".obs;
+  var authpbsi = "".obs;
 
-  loginCheck() {
+  var authtoken = "".obs;
+  var relog = false.obs;
+
+  
+
+  loginCheck() async {
+    sideC.changeIndex(0);
     User? user = _auth.currentUser;
     if (user != null) {
-      authEmail.value = user.email!;
+      
       isLogin.value = true;
+      authEmail.value = user.email!.toString();
+      final data = await db
+          .collection('users')
+          .where('email'.toString().toLowerCase(),
+              isEqualTo: authEmail.value.toLowerCase())
+          .get();
+      authLevel.value = data.docs[0]['level'];
+      authpbsi.value = data.docs[0]['pbsi'];
+      update();
     } else {
       isLogin.value = false;
+      update();
     }
-    update();
   }
 
   login() async {
+    if(!relog.value){
+      sideC.changeIndex(0);
+    }
     loadC.changeLoading(true);
     try {
       if (!email.value.contains('@')) {
@@ -52,7 +75,16 @@ class AuthController extends GetxController {
 
       if (user != null) {
         isLogin.value = true;
-        authEmail.value = user.email!;
+        authEmail.value = user.email!.toString();
+        final data = await db
+            .collection('users')
+            .where('email'.toString().toLowerCase(),
+                isEqualTo: authEmail.value.toLowerCase())
+            .get();
+        authLevel.value = data.docs[0]['level'];
+        authpbsi.value = data.docs[0]['pbsi'];
+        
+        
         Get.offAllNamed(PageNames.Home);
       } else {
         isLoginFail.value = true;
@@ -60,12 +92,13 @@ class AuthController extends GetxController {
       loadC.changeLoading(false);
       update();
     } catch (e) {
-      print(e);
       isLoginFail.value = true;
       loadC.changeLoading(false);
       update();
     }
   }
+
+
 
   logout() async {
     try {
@@ -79,13 +112,19 @@ class AuthController extends GetxController {
   }
 
   registerUser(String emailInput) async {
+    isLoginFail.value = false;
     String password = "12345678";
     try {
       await _auth.createUserWithEmailAndPassword(
         email: emailInput,
         password: password,
       );
+      await _auth.signOut();
+      relog.value = true;
+      login();
+      relog.value = false;
     } catch (e) {
+      isLoginFail.value = true;
       print('Error saat mendaftarkan pengguna: $e');
     }
   }
