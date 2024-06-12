@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../Widgets/NewSideBar.dart';
+import '../../Routes/PageNames.dart';
 import '../../Controllers/PBSIController.dart';
 import '../../Controllers/SidebarContoller.dart';
 import '../../Controllers/AuthController.dart';
@@ -44,8 +45,17 @@ class _HomeState extends State<Home> {
                             const IconThemeData(color: Colors.white),
                         selectedLabelTextStyle:
                             const TextStyle(color: Colors.white),
-                        leading: Container(
-                          height: 50,
+                        leading: SizedBox(
+                          height: 70,
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.toNamed(PageNames.Profil);
+                            },
+                            child: CircleAvatar(
+                              backgroundImage:
+                                  NetworkImage("${authC.authimg.value}"),
+                            ),
+                          ),
                           //color: Colors.amber,
                         ),
                         destinations: const [
@@ -96,8 +106,17 @@ class _HomeState extends State<Home> {
                               const IconThemeData(color: Colors.white),
                           selectedLabelTextStyle:
                               const TextStyle(color: Colors.white),
-                          leading: Container(
-                            height: 50,
+                          leading: SizedBox(
+                            height: 70,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed(PageNames.Profil);
+                              },
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage("${authC.authimg.value}"),
+                              ),
+                            ),
                             //color: Colors.amber,
                           ),
                           destinations: const [
@@ -143,8 +162,17 @@ class _HomeState extends State<Home> {
                               const IconThemeData(color: Colors.white),
                           selectedLabelTextStyle:
                               const TextStyle(color: Colors.white),
-                          leading: Container(
-                            height: 50,
+                          leading: SizedBox(
+                            height: 70,
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed(PageNames.Profil);
+                              },
+                              child: CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage("${authC.authimg.value}"),
+                              ),
+                            ),
                             //color: Colors.amber,
                           ),
                           destinations: const [

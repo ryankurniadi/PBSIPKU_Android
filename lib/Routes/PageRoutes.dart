@@ -26,6 +26,9 @@ import '../Views/Pages/AddUser.dart';
 import '../Views/Pages/DataAnggota.dart';
 import '../Views/Pages/AddAnggota.dart';
 
+
+import '../Views/Pages/Profil.dart';
+
 class PageRoutes {
   static final Pages = [
     GetPage(
@@ -55,6 +58,15 @@ class PageRoutes {
         name: PageNames.Init,
         binding: HomeBinding(),
         page: () => Initialpage()),
+
+
+    //Profil
+        GetPage(
+        name: PageNames.Profil,
+        middlewares: [
+          AuthMiddleware(),
+        ],
+        page: () => Profil()),
 
     //PBSI
     GetPage(

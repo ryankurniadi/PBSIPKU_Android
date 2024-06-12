@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../Widgets/NavBar.dart';
-import '../Widgets/Sidebar.dart';
 import '../../Routes/PageNames.dart';
 import '../../Models/Turnamen.dart';
 import '../../Controllers/TurnamenContoller.dart';

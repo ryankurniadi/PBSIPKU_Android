@@ -21,6 +21,7 @@ class AuthController extends GetxController {
   var authLevel = "".obs;
   var authpbsi = "".obs;
   var authpbsinama = "".obs;
+  var authimg = "".obs;
 
   var authtoken = "".obs;
   var relog = false.obs;
@@ -38,6 +39,7 @@ class AuthController extends GetxController {
           .get();
       authLevel.value = data.docs[0]['level'];
       authpbsi.value = data.docs[0]['pbsi'];
+      authimg.value = data.docs[0]['img'];
       try {
         final datapb =
             await db.collection("pbsi").doc(data.docs[0]['pbsi']).get();
@@ -92,6 +94,7 @@ class AuthController extends GetxController {
             .get();
         authLevel.value = data.docs[0]['level'];
         authpbsi.value = data.docs[0]['pbsi'];
+        authimg.value = data.docs[0]['img'];
         try {
           final datapb =
               await db.collection("pbsi").doc(data.docs[0]['pbsi']).get();

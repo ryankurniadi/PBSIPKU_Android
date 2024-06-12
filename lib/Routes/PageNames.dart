@@ -8,6 +8,9 @@ abstract class PageNames{
   static const Login = '/Login';
   static const Init = '/Init';
 
+  //profil
+  static const Profil = '/Profil';
+
   //PBSI
   static const DataPBSI = '/DataPBSI';
   static const AddPBSI = '/AddPBSI';

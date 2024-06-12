@@ -29,6 +29,7 @@ class UserController extends GetxController {
   var hp = 0.obs;
 
   var isRoot = true.obs;
+  User? userProfil;
 
   getUserData() async {
     final ref = db.collection("users").withConverter(
@@ -116,12 +117,12 @@ class UserController extends GetxController {
           .where('email'.toString().toLowerCase(),
               isEqualTo: emails.toLowerCase())
           .get();
-      
+
       log.docs.forEach((doc) {
         //print(doc.id);
         doc.reference.delete();
       });
-      
+
       getUserData();
       Get.back();
       Get.snackbar("Berhasil", "Data Berhasil Di Hapus",
@@ -136,10 +137,35 @@ class UserController extends GetxController {
     update();
   }
 
+  getSingleUser() async {
+    try {
+      final ref = db.collection("users").withConverter(
+            fromFirestore: User.fromFirestore,
+            toFirestore: (User user, _) => user.toFirestore());
+      final data = await ref
+          .where('email'.toString().toLowerCase(),
+              isEqualTo: authC.authEmail.value.toLowerCase())
+          .get();
+      userProfil = User(
+        id: ref.id,
+        nama: data.docs[0]['nama'],
+        level: data.docs[0]['level'],
+        username: data.docs[0]['username'],
+        email: data.docs[0]['email'],
+        hp: data.docs[0]['hp'],
+        img: data.docs[0]['img'],
+        isActive: data.docs[0]['isActive'],
+        isPickUsername: data.docs[0]['isPickUsername'],
+        pbsi: data.docs[0]['pbsi'],
+        skill: data.docs[0]['skill'],
+      );
+    } catch (e) {}
+  }
+
   @override
   void onInit() {
     getUserData();
-
+    getSingleUser();
     super.onInit();
   }
 }
