@@ -159,13 +159,14 @@ class UserController extends GetxController {
         pbsi: data.docs[0]['pbsi'],
         skill: data.docs[0]['skill'],
       );
+      update();
     } catch (e) {}
   }
 
   @override
   void onInit() {
     getUserData();
-    getSingleUser();
+   
     super.onInit();
   }
 }

@@ -6,6 +6,7 @@ import '../../Routes/PageNames.dart';
 import '../../Controllers/PBSIController.dart';
 import '../../Controllers/SidebarContoller.dart';
 import '../../Controllers/AuthController.dart';
+import '../../Controllers/UserController.dart';
 
 class Home extends StatefulWidget {
   Home({super.key});
@@ -16,9 +17,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final pbsiC = Get.put(PBSIController());
-
+  final userC = Get.find<UserController>();
   @override
   Widget build(BuildContext context) {
+    userC.getSingleUser();
     return SafeArea(
       child: Scaffold(
           //appBar: NavBar(title: "PBSI KOTA PEKANBARU"),
@@ -110,6 +112,7 @@ class _HomeState extends State<Home> {
                             height: 70,
                             child: GestureDetector(
                               onTap: () {
+                                
                                 Get.toNamed(PageNames.Profil);
                               },
                               child: CircleAvatar(
