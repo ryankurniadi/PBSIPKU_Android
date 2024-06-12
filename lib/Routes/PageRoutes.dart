@@ -17,6 +17,7 @@ import '../Views/Pages/EditPBSI.dart';
 
 import '../Views/Pages/AddTurnament.dart';
 import '../Views/Pages/DataTurnamen.dart';
+import '../Views/Pages/EditTurnamen.dart';
 
 import '../Views/Pages/DataBerita.dart';
 
@@ -101,6 +102,12 @@ class PageRoutes {
           AuthMiddleware(),
         ],
         page: () => AddTurnamner()),
+    GetPage(
+        name: PageNames.EditTurnamen,
+        middlewares: [
+          AuthMiddleware(),
+        ],
+        page: () => EditTurnamen()),
 
     //Berita
     GetPage(

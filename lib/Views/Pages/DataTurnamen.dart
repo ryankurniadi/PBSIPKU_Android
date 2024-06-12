@@ -20,9 +20,6 @@ class DataTurnamen extends StatelessWidget {
         body: ListView(
           shrinkWrap: true,
           children: [
-            const Center(
-              child: Text("Data Turnamen"),
-            ),
             const SizedBox(
               height: 10,
             ),
@@ -59,7 +56,11 @@ class DataTurnamen extends StatelessWidget {
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            IconButton(onPressed: (){}, icon: const Icon(Icons.edit)),
+                            IconButton(onPressed: ()async{
+                              turC.turID.value = "${dataTur.id}";
+                              await turC.getSingleTur();
+                              Get.toNamed(PageNames.EditTurnamen);
+                            }, icon: const Icon(Icons.edit)),
                             IconButton(onPressed: (){
                               Get.defaultDialog(
                               title: "Konfirmasi Hapus",
@@ -82,7 +83,7 @@ class DataTurnamen extends StatelessWidget {
                     },
                   );
                 } else {
-                  return Center(child: const Text("No Data"));
+                  return const Center(child: const Text("No Data"));
                 }
               },
             ),

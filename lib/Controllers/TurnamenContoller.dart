@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-
 import '../Models/Turnamen.dart';
 import './LoadingController.dart';
-
 
 class TurnamenController extends GetxController {
   final db = FirebaseFirestore.instance;
@@ -23,6 +21,7 @@ class TurnamenController extends GetxController {
   var nama = "".obs;
   var status = "".obs;
   var table = 'turnamen';
+  var lokasi = "".obs;
   var totalTur = 0.obs;
   var pbsi = "".obs;
   var dataTurnamen = [].obs;
@@ -31,6 +30,10 @@ class TurnamenController extends GetxController {
   var dateShow = "".obs;
   var dateShow2 = "".obs;
   var statusupload = true.obs;
+
+  var turID = "".obs;
+  var dataSatuTur = [].obs;
+  var isEditImg = false.obs;
 
   final loadC = Get.find<LoadingController>();
 
@@ -63,6 +66,7 @@ class TurnamenController extends GetxController {
             level: docSnap.docs[i].data().level,
             batas: docSnap.docs[i].data().batas,
             pbsi: docSnap.docs[i].data().pbsi,
+            lokasi: docSnap.docs[i].data().lokasi,
           ));
         }
       } else {
@@ -95,6 +99,7 @@ class TurnamenController extends GetxController {
           img: link.value,
           pbsi: pbsi.value,
           batas: date2.value,
+          lokasi: lokasi.value,
         ),
       );
       loadC.changeLoading(false);
@@ -108,7 +113,53 @@ class TurnamenController extends GetxController {
       Get.snackbar("Gagal", "Data Gagal Di Tambah",
           backgroundColor: Colors.red);
     }
-    
+  }
+
+  editData(Uint8List? image) async {
+    Turnamen data = dataSatuTur[0];
+    statusupload.value = true;
+    final ref = db.collection(table).withConverter(
+        fromFirestore: Turnamen.fromFirestore,
+        toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
+    link.value = data.img!;
+    //print(image);
+    if (isEditImg.value) {
+      //print("Kesini");
+      try {
+        await uploadImg(image!);
+        if (!statusupload.value) {
+          throw Exception('No Image');
+        }
+      } catch (e) {
+        print(e);
+        loadC.changeLoading(false);
+        Get.snackbar("Gagal", "Error Pada Gambar", backgroundColor: Colors.red);
+      }
+    }
+
+    try {
+      await ref.doc(turID.value).update({
+        'nama': nama.value,
+        'date': date.value,
+        'ket': ket.value,
+        'level': level.value,
+        'img': link.value,
+        'batas': date2.value,
+        'lokasi': lokasi.value,
+      });
+      loadC.changeLoading(false);
+      Get.back();
+      Get.snackbar("Berhasil", "Data Berhasil Di tambah",
+          backgroundColor: Colors.green);
+      await getData();
+      imageBytes.value = Uint8List(0);
+      isEditImg.value = false;
+    } catch (e) {
+      isEditImg.value = false;
+      loadC.changeLoading(false);
+      Get.snackbar("Gagal", "Data Gagal Di Tambah",
+          backgroundColor: Colors.red);
+    }
   }
 
   void deleteData(String id, String img) async {
@@ -130,6 +181,7 @@ class TurnamenController extends GetxController {
     showDate(tgl);
     update();
   }
+
   void setDate2(DateTime tgl) {
     date2.value = tgl;
     showDate2(tgl);
@@ -140,6 +192,7 @@ class TurnamenController extends GetxController {
     dateShow.value = "${DateFormat("EEEE, dd MMMM yyyy", "id").format(tgl)}";
     update();
   }
+
   void showDate2(DateTime tgl) {
     dateShow2.value = "${DateFormat("EEEE, dd MMMM yyyy", "id").format(tgl)}";
     update();
@@ -153,6 +206,10 @@ class TurnamenController extends GetxController {
             .child('/Turnamen')
             .child(DateTime.now().microsecondsSinceEpoch.toString() + ".png");
         await ref.putData(imageData);
+        if (isEditImg.value) {
+          Reference re = FirebaseStorage.instance.refFromURL(link.value);
+          await re.delete();
+        }
         String downloadURL = await ref.getDownloadURL();
         link.value = downloadURL;
       } else {
@@ -179,6 +236,37 @@ class TurnamenController extends GetxController {
 
       reader.readAsArrayBuffer(file);
     });
+    update();
+  }
+
+  getSingleTur() async {
+    final ref = db.collection(table).withConverter(
+        fromFirestore: Turnamen.fromFirestore,
+        toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
+    try {
+      dataSatuTur.clear();
+      final docSnap = await ref.doc(turID.value).get();
+      setDate(docSnap['date'].toDate());
+      setDate2(docSnap['batas'].toDate());
+      dataSatuTur.add(Turnamen(
+        nama: docSnap['nama'],
+        level: docSnap['level'],
+        lokasi: docSnap['lokasi'],
+        img: docSnap['img'],
+        batas: docSnap['batas'].toDate(),
+        date: docSnap['date'].toDate(),
+        ket: docSnap['ket'],
+        pbsi: docSnap['pbsi'],
+        status: docSnap['status'],
+      ));
+      update();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  editImgchange(bool val) {
+    isEditImg.value = val;
     update();
   }
 }

@@ -6,22 +6,24 @@ import 'package:html_editor_enhanced/html_editor.dart';
 
 import '../Widgets/NavBar.dart';
 import '../Widgets/LoadingBarrier.dart';
+import '../../Models/Turnamen.dart';
 import '../../Controllers/TurnamenContoller.dart';
 import '../../Controllers/InputHideController.dart';
 import '../../Controllers/LoadingController.dart';
 
-class AddTurnamner extends StatelessWidget {
-  AddTurnamner({super.key});
-  final _formKey = GlobalKey<FormState>();
+class EditTurnamen extends StatelessWidget {
+  EditTurnamen({super.key});
+
+final _formKey = GlobalKey<FormState>();
   final turC = Get.find<TurnamenController>();
   final loadC = Get.find<LoadingController>();
   final inputC = Get.put(InputHideController());
   HtmlEditorController controller = HtmlEditorController();
 
-  Future<void> _datePick(BuildContext context) async {
+  Future<void> _datePick(BuildContext context, DateTime init) async {
     DateTime? datepick = await showDatePicker(
         context: context,
-        initialDate: turC.date.value,
+        initialDate: init,
         firstDate: DateTime.now(),
         lastDate: DateTime(DateTime.now().year + 1),
         onDatePickerModeChange: (value) {
@@ -35,10 +37,10 @@ class AddTurnamner extends StatelessWidget {
     }
   }
 
-  Future<void> _datePick2(BuildContext context) async {
+  Future<void> _datePick2(BuildContext context, DateTime init) async {
     DateTime? datepick = await showDatePicker(
         context: context,
-        initialDate: turC.date2.value,
+        initialDate: init,
         firstDate: DateTime.now(),
         lastDate: turC.date.value);
     inputC.inputChange(false);
@@ -54,8 +56,9 @@ class AddTurnamner extends StatelessWidget {
     var prev = turC.imageBytes;
     return SafeArea(
         child: Scaffold(
-      appBar: NavBar(title: "Tambah Turnamen"),
+      appBar: NavBar(title: "Edit Turnamen"),
       body: GetBuilder<TurnamenController>(builder: (turC) {
+        Turnamen data = turC.dataSatuTur[0];
         return LoadingBarrier(
             child: ListView(
           children: [
@@ -66,6 +69,7 @@ class AddTurnamner extends StatelessWidget {
                 child: Column(
                   children: [
                     TextFormField(
+                      initialValue: data.nama,
                       decoration: const InputDecoration(
                           hintText: "Nama Turnamen",
                           label: Text("Nama Turnamen")),
@@ -87,6 +91,7 @@ class AddTurnamner extends StatelessWidget {
                       ],
                     ),
                     DropdownButtonFormField(
+                      
                       items: const [
                         DropdownMenuItem(
                           value: "Level A",
@@ -105,7 +110,10 @@ class AddTurnamner extends StatelessWidget {
                           child: Text("Level D"),
                         )
                       ],
-                      value: "Level A",
+                      value: "${data.level}",
+                      onSaved: (value) {
+                        turC.level.value = value!;
+                      },
                       onChanged: (value) {
                         turC.level.value = value!;
                       },
@@ -125,7 +133,7 @@ class AddTurnamner extends StatelessWidget {
                       ),
                       readOnly: true,
                       onTap: () {
-                        _datePick(context);
+                        _datePick(context, data.date!);
                         inputC.inputChange(true);
                       },
                     ),
@@ -147,7 +155,7 @@ class AddTurnamner extends StatelessWidget {
                       ),
                       readOnly: true,
                       onTap: () {
-                        _datePick2(context);
+                        _datePick2(context, data.batas!);
                         inputC.inputChange(true);
                       },
                     ),
@@ -155,6 +163,7 @@ class AddTurnamner extends StatelessWidget {
                       height: 10,
                     ),
                     TextFormField(
+                      initialValue: data.lokasi,
                       decoration: const InputDecoration(
                           hintText: "Lokasi Turnamen",
                           label: Text("Lokasi Turnamen")),
@@ -185,7 +194,7 @@ class AddTurnamner extends StatelessWidget {
                             controller: controller,
                             htmlEditorOptions: HtmlEditorOptions(
                               hint: "Masukan Keterangan",
-                              initialText: turC.ket.value,
+                              initialText: data.ket,
                               characterLimit: 1000,
                               autoAdjustHeight: true,
                             ),
@@ -220,10 +229,10 @@ class AddTurnamner extends StatelessWidget {
                     ),
                     const Row(
                       children: [
-                        Text("Brosur Turnamen"),
+                        Text("Brosur Turnamen, (Klik gambar untuk mengganti Gambar)"),
                       ],
                     ),
-                    Obx(() {
+                    (turC.isEditImg.value ? Obx(() {
                       if (prev.value != null && prev.value!.isNotEmpty) {
                         return Image.memory(
                           prev.value!,
@@ -248,7 +257,21 @@ class AddTurnamner extends StatelessWidget {
                               ),
                             ));
                       }
-                    }),
+                    }): SizedBox(
+                      width: 200,
+                      height: 200,
+                      child: InkWell(
+                        onTap: (){
+                          turC.pickImage();
+                          turC.editImgchange(true);
+                          
+                        },
+                        child: Image(
+                          image: NetworkImage('${data.img}'),
+                          
+                        ),
+                      ),
+                    )),
                     const SizedBox(
                       height: 20,
                     ),
@@ -264,7 +287,7 @@ class AddTurnamner extends StatelessWidget {
                                     '<text removed due to base-64 data, displaying the text could cause the app to crash>';
                               }
                               turC.ket.value = txt;
-                              turC.addData(prev.value!);
+                              turC.editData(prev.value);
                             } else {
                               Get.snackbar(
                                   "Gagal", "Gambar Baner Tidak Boleh Kosong",
