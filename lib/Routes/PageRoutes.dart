@@ -11,21 +11,6 @@ import '../Views/Pages/LoginPage.dart';
 import '../Views/Pages/BlankPage.dart';
 import '../Views/Pages/InitialPage.dart';
 
-import '../Views/Pages/DataPBSI.dart';
-import '../Views/Pages/AddPBSI.dart';
-import '../Views/Pages/EditPBSI.dart';
-
-import '../Views/Pages/AddTurnament.dart';
-import '../Views/Pages/DataTurnamen.dart';
-import '../Views/Pages/EditTurnamen.dart';
-
-import '../Views/Pages/DataBerita.dart';
-
-import '../Views/Pages/DataUsers.dart';
-import '../Views/Pages/AddUser.dart';
-
-import '../Views/Pages/DataAnggota.dart';
-import '../Views/Pages/AddAnggota.dart';
 
 
 import '../Views/Pages/Profil.dart';
@@ -69,80 +54,5 @@ class PageRoutes {
         ],
         page: () => Profil()),
 
-    //PBSI
-    GetPage(
-        name: PageNames.DataPBSI,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => DataPBSI()),
-    GetPage(
-        name: PageNames.AddPBSI,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => AddPBSI()),
-    GetPage(
-        name: PageNames.EditPBSI,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => EditPBSI()),
-
-    //Turnamen
-    GetPage(
-        name: PageNames.DataTurnamen,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => DataTurnamen()),
-    GetPage(
-        name: PageNames.AddTurnamen,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => AddTurnamner()),
-    GetPage(
-        name: PageNames.EditTurnamen,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => EditTurnamen()),
-
-    //Berita
-    GetPage(
-        name: PageNames.DataBerita,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => DataBerita()),
-
-    //Users
-    GetPage(
-        name: PageNames.DataUser,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => DataUsers()),
-    GetPage(
-        name: PageNames.AddUser,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => AddUser()),
-
-    //Manajemen PBSI
-    GetPage(
-        name: PageNames.DataAnggota,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => DataAnggota()),
-    GetPage(
-        name: PageNames.AddAnggota,
-        middlewares: [
-          AuthMiddleware(),
-        ],
-        page: () => AddAnggota()),
   ];
 }
