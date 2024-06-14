@@ -28,59 +28,25 @@ class LoginPage extends StatelessWidget {
                     key: _formKey,
                     child: Column(
                       children: [
-                        Card(
-                          margin: EdgeInsets.symmetric(horizontal: Get.width / 3),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 80, vertical: 40),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                TextFormField(
-                                    controller: TextEditingController(),
-                                    keyboardType: TextInputType.emailAddress,
-                                    decoration: InputDecoration(
-                                      hintText: "E-mail/Username",
-                                      prefixIcon: const Icon(Icons.person),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                            20.0), // Melengkungkan border
-                                      ),
-                                    ),
-                                    onSaved: (value) {
-                                      authC.email.value = value!;
-                                    },
-                                    onFieldSubmitted: (value) {
-                                      if (_formKey.currentState!.validate()) {
-                                        _formKey.currentState!.save();
-                                        authC.login();
-                                      }
-                                    },
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "E-Mail Wajib Di Isi";
-                                      }
-                                      if(value.length < 6 ){
-                                        return "Username Terlalu Pendek";
-                                      }
-                                    }),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                TextFormField(
-                                  obscureText: true,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 80, vertical: 40),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                  controller: TextEditingController(),
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
-                                    hintText: "Password",
-                                    prefixIcon: const Icon(Icons.lock),
-                                    filled: true,
-                                    fillColor: Colors.grey[200],
+                                    hintText: "E-mail/Username",
+                                    prefixIcon: const Icon(Icons.person),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(
                                           20.0), // Melengkungkan border
                                     ),
                                   ),
                                   onSaved: (value) {
-                                    authC.password.value = value!;
+                                    authC.email.value = value!;
                                   },
                                   onFieldSubmitted: (value) {
                                     if (_formKey.currentState!.validate()) {
@@ -90,24 +56,55 @@ class LoginPage extends StatelessWidget {
                                   },
                                   validator: (value) {
                                     if (value!.isEmpty) {
-                                      return "Password Wajib Di Isi";
+                                      return "E-Mail Wajib Di Isi";
                                     }
-                                  },
-                                ),
-                                if (authC.isLoginFail.value)
-                                  const Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "username atau password salah",
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ],
+                                    if(value.length < 6 ){
+                                      return "Username Terlalu Pendek";
+                                    }
+                                  }),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  hintText: "Password",
+                                  prefixIcon: const Icon(Icons.lock),
+                                  filled: true,
+                                  fillColor: Colors.grey[200],
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        20.0), // Melengkungkan border
                                   ),
-                              ],
-                            ),
+                                ),
+                                onSaved: (value) {
+                                  authC.password.value = value!;
+                                },
+                                onFieldSubmitted: (value) {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    authC.login();
+                                  }
+                                },
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Password Wajib Di Isi";
+                                  }
+                                },
+                              ),
+                              if (authC.isLoginFail.value)
+                                const Column(
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      "username atau password salah",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ],
+                                ),
+                            ],
                           ),
                         ),
                         const SizedBox(

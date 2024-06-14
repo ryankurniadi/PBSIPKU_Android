@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../Models/PBSI.dart';
 import '../Models/User.dart';
 import './AuthController.dart';
 import './LoadingController.dart';
@@ -27,6 +28,8 @@ class UserController extends GetxController {
   var pbsi = "".obs;
   var skill = "Level D".obs;
   var hp = 0.obs;
+
+  var pbsiname = "".obs;
 
   var isRoot = true.obs;
   User? userProfil;
@@ -159,6 +162,14 @@ class UserController extends GetxController {
         pbsi: data.docs[0]['pbsi'],
         skill: data.docs[0]['skill'],
       );
+
+
+      final snap = await db.collection('pbsi').doc(userProfil!.pbsi).get();
+        if(snap != null){
+          pbsiname.value = snap.data()!['nama'];
+          //print(use.data()!['nama']);
+        }
+
       update();
     } catch (e) {}
   }

@@ -9,7 +9,9 @@ class BlankPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: NavBar(title: "Blank Page"),
+        body: Center(
+          child: Text("BLANK PAGE"),
+        ),
       //drawer: Sidebar(),
     ));
   }

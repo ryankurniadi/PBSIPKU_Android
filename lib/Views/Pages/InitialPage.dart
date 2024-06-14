@@ -6,24 +6,24 @@ import './LoginPage.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/LoadingController.dart';
 import '../../Controllers/SidebarContoller.dart';
+import '../../Controllers/UserController.dart';
 
 class Initialpage extends StatelessWidget {
   Initialpage({super.key});
   final loadC = Get.put(LoadingController());
-  final sideC = Get.put(SidebarController());
-  final authC = Get.put(AuthController());
-  
 
+  final sideC = Get.put(SidebarController());
+
+  final authC = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AuthController>(
-      builder: (authC){
-        if(authC.isLogin.value){
-          return Home();
-        }else{
-          return LoginPage();
-        }
+    return GetBuilder<AuthController>(builder: (authC) {
+      if (authC.isLogin.value) {
+        // /userC.getSingleUser();
+        return Home();
+      } else {
+        return LoginPage();
       }
-    );
+    });
   }
 }
