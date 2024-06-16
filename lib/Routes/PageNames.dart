@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'package:pbsipku/Views/Pages/DetailTurnamen.dart';
+
 abstract class PageNames{
   static const index = '/';
   static const Home = '/Dashboard';
@@ -20,6 +22,7 @@ abstract class PageNames{
   static const DataTurnamen = '/Data-Turnamen';
   static const AddTurnamen = '/Add-Turnamen';
   static const EditTurnamen = '/Edit-Turnamen';
+  static const DetailTurnamen = '/Detail-Turnamen';
 
   //Berita
   static const DataBerita = '/Data-Berita';

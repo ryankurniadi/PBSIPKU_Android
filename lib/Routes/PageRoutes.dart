@@ -10,6 +10,7 @@ import '../Views/Pages/Beranda.dart';
 import '../Views/Pages/LoginPage.dart';
 import '../Views/Pages/BlankPage.dart';
 import '../Views/Pages/InitialPage.dart';
+import '../Views/Pages/DetailTurnamen.dart';
 
 
 
@@ -53,6 +54,12 @@ class PageRoutes {
           AuthMiddleware(),
         ],
         page: () => Profil()),
+        GetPage(
+        name: PageNames.DetailTurnamen,
+        middlewares: [
+          AuthMiddleware(),
+        ],
+        page: () => DetailTurnamen()),
 
   ];
 }

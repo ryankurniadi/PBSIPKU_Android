@@ -1,7 +1,7 @@
-
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -34,6 +34,7 @@ class TurnamenController extends GetxController {
   var turID = "".obs;
   var dataSatuTur = [].obs;
   var isEditImg = false.obs;
+  var terDaftar = false.obs;
 
   final loadC = Get.find<LoadingController>();
 
@@ -51,7 +52,10 @@ class TurnamenController extends GetxController {
         fromFirestore: Turnamen.fromFirestore,
         toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
     try {
-      final docSnap = await ref.where("level".toString(),isEqualTo: userC.userProfil!.skill).orderBy('date').get();
+      final docSnap = await ref
+          .where("level".toString(), isEqualTo: userC.userProfil!.skill)
+          .orderBy('date')
+          .get();
       if (docSnap.docs.isNotEmpty) {
         dataTurnamen.clear();
         totalTur.value = docSnap.docs.length;
@@ -67,6 +71,9 @@ class TurnamenController extends GetxController {
             batas: docSnap.docs[i].data().batas,
             pbsi: docSnap.docs[i].data().pbsi,
             lokasi: docSnap.docs[i].data().lokasi,
+            limit: docSnap.docs[i].data().limit,
+            kontak: docSnap.docs[i].data().kontak,
+            tipe: docSnap.docs[i].data().tipe,
           ));
         }
       } else {
@@ -78,10 +85,6 @@ class TurnamenController extends GetxController {
       print(e);
     }
   }
-
-  
-
-  
 
   void setDate(DateTime tgl) {
     date.value = tgl;
@@ -124,6 +127,9 @@ class TurnamenController extends GetxController {
         ket: docSnap['ket'],
         pbsi: docSnap['pbsi'],
         status: docSnap['status'],
+        limit: docSnap['limit'],
+        kontak: docSnap['kontak'],
+        tipe: docSnap['tipe'],
       ));
       update();
     } catch (e) {
@@ -131,4 +137,46 @@ class TurnamenController extends GetxController {
     }
   }
 
+  daftarTur(String userID, String idPBSI) async {
+    loadC.changeLoading(true);
+    final ref = db.collection('peserta');
+    try {
+      await ref.add({
+        "idUser" : userID,
+        "idTurnamen" : turID.value, 
+        "idPBSI" : idPBSI,
+        "status" : "Pending"
+      });
+      terDaftar.value = true;
+      update();
+      loadC.changeLoading(false); 
+      Get.snackbar("Berhasil", "Berhasil Mengajukan Pendaftaran",
+            backgroundColor: Colors.green);
+    } catch (e) {
+      loadC.changeLoading(false);
+      Get.snackbar("Gagal", "Gagal Mengajukan Pendaftaran",
+          backgroundColor: Colors.red);
+      print(e);
+    }
+  }
+
+  cekTerdaftar(String userID) async {
+    loadC.changeLoading(true);
+    terDaftar.value = false;
+    final ref = db.collection('peserta');
+    try {
+      final data = await ref
+          .where('idUser'.toString(), isEqualTo: userID)
+          .where('idTurnamen'.toString(), isEqualTo: turID.value)
+          .get();
+      if (data.docs.isNotEmpty) {
+        terDaftar.value = true;
+        update();
+      }
+      loadC.changeLoading(false);
+    } catch (e) {
+      loadC.changeLoading(false);
+      print(e);
+    }
+  }
 }
