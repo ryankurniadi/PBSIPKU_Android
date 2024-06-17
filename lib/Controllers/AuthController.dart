@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import './LoadingController.dart';
 import '../Routes/PageNames.dart';
@@ -9,6 +10,8 @@ import '../Controllers/SidebarContoller.dart';
 class AuthController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final _msg = FirebaseMessaging.instance;
+
   final loadC = Get.find<LoadingController>();
   final sideC = Get.find<SidebarController>();
   var isLogin = false.obs;
@@ -27,21 +30,35 @@ class AuthController extends GetxController {
   var authtoken = "".obs;
   var relog = false.obs;
 
+  var devToken = "".obs;
+
   loginCheck() async {
+    await initNotif();
     sideC.changeIndex(0);
     User? user = _auth.currentUser;
     if (user != null) {
       isLogin.value = true;
       authEmail.value = user.email!.toString();
-      final data = await db
-          .collection('users')
-          .where('email'.toString().toLowerCase(),
-              isEqualTo: authEmail.value.toLowerCase())
-          .get();
+      final datas = db.collection('users').where(
+          'email'.toString().toLowerCase(),
+          isEqualTo: authEmail.value.toLowerCase());
+      final data = await datas.get();
       authLevel.value = data.docs[0]['level'];
       authpbsi.value = data.docs[0]['pbsi'];
       authimg.value = data.docs[0]['img'];
       authUserID.value = data.docs[0].id;
+
+      final check = db.collection('users').doc(data.docs[0].id);
+      if (data.docs[0]['token'] == "") {
+        await check.update({
+          "token": devToken.value,
+        });
+      } else if (data.docs[0]['token'] != devToken.value) {
+        await check.update({
+          "token": devToken.value,
+        });
+      }
+
       try {
         final datapb =
             await db.collection("pbsi").doc(data.docs[0]['pbsi']).get();
@@ -65,6 +82,7 @@ class AuthController extends GetxController {
       sideC.changeIndex(0);
     }
     loadC.changeLoading(true);
+    await initNotif();
     try {
       if (!email.value.contains('@')) {
         final rep = await db
@@ -109,6 +127,16 @@ class AuthController extends GetxController {
           authpbsinama.value = data.docs[0]['pbsi'];
           print(e);
         }
+        final check = db.collection('users').doc(data.docs[0].id);
+        if (data.docs[0]['token'] == "") {
+          await check.update({
+            "token": devToken.value,
+          });
+        } else if (data.docs[0]['token'] != devToken.value) {
+          await check.update({
+            "token": devToken.value,
+          });
+        }
         Get.offAllNamed(PageNames.Home);
       } else {
         isLoginFail.value = true;
@@ -130,6 +158,13 @@ class AuthController extends GetxController {
       Get.offAllNamed(PageNames.Login);
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> initNotif() async {
+    final FCNToken = await _msg.getToken();
+    if (FCNToken != null) {
+      devToken.value = FCNToken;
     }
   }
 

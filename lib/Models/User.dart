@@ -11,12 +11,14 @@ class User{
   String? pbsi;
   String? skill;
   String? img;
+  String? token;
   int? hp;
 
   User({
     this.id,
     this.nama,
     this.level,
+    this.token,
     this.img,
     this.email,
     this.hp,

@@ -66,74 +66,6 @@ class UserController extends GetxController {
     } catch (e) {}
   }
 
-  addUser() async {
-    loadC.changeLoading(true);
-    final _user = User(
-      nama: nama.value,
-      img: defaultimg,
-      username: "null",
-      email: email.value,
-      hp: hp.value,
-      isActive: isActive.value,
-      isPickUsername: isPickUsername.value,
-      level: level.value,
-      pbsi: pbsi.value,
-      skill: skill.value,
-    );
-    try {
-      if (await authC.checkEmail(email.value)) {
-        throw Exception();
-      } else {
-        await authC.registerUser(email.value);
-        if (authC.isLoginFail.value) {
-          throw Exception();
-        }
-        final ref = db.collection("users").withConverter(
-            fromFirestore: User.fromFirestore,
-            toFirestore: (User user, _) => user.toFirestore());
-        await ref.add(_user);
-        final userlog = <String, String>{
-          "email": email.value,
-          "username": "null",
-        };
-        await db.collection("userlogs").add(userlog);
-        getUserData();
-        loadC.changeLoading(false);
-        pbsi.value = "";
-        level.value = "";
-        Get.back();
-        Get.snackbar("Berhasil", "Data Berhasil Di tambah",
-            backgroundColor: Colors.green);
-      }
-    } catch (e) {
-      loadC.changeLoading(false);
-      Get.snackbar("Gagal", "Data Gagal Di Tambah",
-          backgroundColor: Colors.red);
-    }
-  }
-
-  deleteUser(String id, String emails) async {
-    try {
-      await db.collection('users').doc(id).delete();
-      final log = await db
-          .collection('userlogs')
-          .where('email'.toString().toLowerCase(),
-              isEqualTo: emails.toLowerCase())
-          .get();
-
-      log.docs.forEach((doc) {
-        //print(doc.id);
-        doc.reference.delete();
-      });
-
-      getUserData();
-      Get.back();
-      Get.snackbar("Berhasil", "Data Berhasil Di Hapus",
-          backgroundColor: Colors.green);
-    } catch (e) {
-      Get.snackbar("Gagal", "Data Gagal Di Hapus", backgroundColor: Colors.red);
-    }
-  }
 
   levelUserChanger(bool value) {
     isRoot.value = value;
@@ -161,6 +93,7 @@ class UserController extends GetxController {
         isPickUsername: data.docs[0]['isPickUsername'],
         pbsi: data.docs[0]['pbsi'],
         skill: data.docs[0]['skill'],
+        token: data.docs[0]['token'],
       );
 
 

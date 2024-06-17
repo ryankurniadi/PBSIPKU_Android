@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../Models/Turnamen.dart';
+import '../Models/Peserta.dart';
+import '../Models/PesertaView.dart';
 import './LoadingController.dart';
 import '../Controllers/UserController.dart';
 
@@ -35,6 +37,9 @@ class TurnamenController extends GetxController {
   var dataSatuTur = [].obs;
   var isEditImg = false.obs;
   var terDaftar = false.obs;
+
+  var riwayatTur = [].obs;
+  var totalRiwayat = 0.obs;
 
   final loadC = Get.find<LoadingController>();
 
@@ -142,16 +147,17 @@ class TurnamenController extends GetxController {
     final ref = db.collection('peserta');
     try {
       await ref.add({
-        "idUser" : userID,
-        "idTurnamen" : turID.value, 
-        "idPBSI" : idPBSI,
-        "status" : "Pending"
+        "idUser": userID,
+        "idTurnamen": turID.value,
+        "idPBSI": idPBSI,
+        "status": "Pending",
+        "createdAt": DateTime.now(),
       });
       terDaftar.value = true;
       update();
-      loadC.changeLoading(false); 
+      loadC.changeLoading(false);
       Get.snackbar("Berhasil", "Berhasil Mengajukan Pendaftaran",
-            backgroundColor: Colors.green);
+          backgroundColor: Colors.green);
     } catch (e) {
       loadC.changeLoading(false);
       Get.snackbar("Gagal", "Gagal Mengajukan Pendaftaran",
@@ -176,6 +182,46 @@ class TurnamenController extends GetxController {
       loadC.changeLoading(false);
     } catch (e) {
       loadC.changeLoading(false);
+      print(e);
+    }
+  }
+
+  getUserTur(String idUser) async {
+    final ref = db.collection("peserta").withConverter(
+        fromFirestore: Peserta.fromFirestore,
+        toFirestore: (Peserta peserta, _) => peserta.toFirestore());
+
+    try {
+      final dataPeserta =
+          await ref.where('idUser'.toString(), isEqualTo: idUser).get();
+      totalRiwayat.value = dataPeserta.docs.length;
+      if (dataPeserta.docs.isNotEmpty) {
+        riwayatTur.clear();
+        for (var i = 0; i < totalRiwayat.value; i++) {
+          final refa = db.collection(table).withConverter(
+              fromFirestore: Turnamen.fromFirestore,
+              toFirestore: (Turnamen turnamen, _) => turnamen.toFirestore());
+          final dataTur =
+              await refa.doc(dataPeserta.docs[i].data().idTurnamen).get();
+          riwayatTur.add(Pesertaview(
+            id: dataPeserta.docs[i].data().id,
+            idPBSI: dataPeserta.docs[i].data().idPBSI,
+            idTurnamen: dataPeserta.docs[i].data().idTurnamen,
+            idUser: dataPeserta.docs[i].data().idUser,
+            namaTur: dataTur.data()!.nama,
+            batas: dataTur.data()!.batas,
+            date: dataTur.data()!.date,
+            img: dataTur.data()!.img,
+            level: dataTur.data()!.level,
+            lokasi: dataTur.data()!.lokasi,
+            status: dataPeserta.docs[i].data().status,
+          ));
+        }
+      } else {
+        totalRiwayat.value = 0;
+      }
+      update();
+    } catch (e) {
       print(e);
     }
   }
