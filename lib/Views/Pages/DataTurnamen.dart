@@ -39,119 +39,143 @@ class _DataTrunamenState extends State<DataTrunamen> {
       onRefresh: () {
         _refreshController.refreshCompleted();
       },
-      child: GetBuilder<TurnamenController>(
-        builder: (turC) {
-          if (turC.totalTur.value > 0) {
-            return ListView.builder(
-              
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-              itemCount: turC.totalTur.value,
-              itemBuilder: (context, index) {
-                Turnamen data = turC.dataTurnamen[index];
-                return InkWell(
-                  onTap: () async{
-                    turC.turID.value = data.id!;
-                    await turC.getSingleTur();
-                    Get.toNamed(PageNames.DetailTurnamen);
-                  },
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        children: [
+          const SizedBox(
+            height: 15,
+          ),
+          const Row(
+            children: [
+              Text(
+                "Turnamen",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          GetBuilder<TurnamenController>(
+            builder: (turC) {
+              if (turC.totalTur.value > 0) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: turC.totalTur.value,
+                  itemBuilder: (context, index) {
+                    Turnamen data = turC.dataTurnamen[index];
+                    return InkWell(
+                      onTap: () async {
+                        turC.turID.value = data.id!;
+                        await turC.getSingleTur();
+                        Get.toNamed(PageNames.DetailTurnamen);
+                      },
+                      child: Column(
                         children: [
-                          Container(
-                            width: 120,
-                            height: 160,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                "${data.img}",
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Column(
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "${data.nama}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 18),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                "${data.lokasi}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 12),
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
                               Container(
+                                width: 120,
+                                height: 160,
                                 decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 2, horizontal: 10),
-                                  child: Center(
-                                    child: Text(
-                                      "${data.level}",
-                                      style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold),
-                                    ),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    "${data.img}",
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
                               const SizedBox(
-                                height: 6,
+                                width: 15,
                               ),
-                              const Text(
-                                "Pelaksanaan Turnamen:",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(DateFormat('EEEE, dd MMMM yyyy', 'id')
-                                  .format(data.date!)),
-                              const SizedBox(height: 3,),
-                              const Text(
-                                "Batas Pendaftaran:",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(DateFormat('EEEE, dd MMMM yyyy', 'id')
-                                  .format(data.batas!)),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${data.nama}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Text(
+                                    "${data.lokasi}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.orange,
+                                        borderRadius: BorderRadius.circular(5)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 10),
+                                      child: Center(
+                                        child: Text(
+                                          "${data.level}",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  const Text(
+                                    "Pelaksanaan Turnamen:",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(DateFormat('EEEE, dd MMMM yyyy', 'id')
+                                      .format(data.date!)),
+                                  const SizedBox(
+                                    height: 3,
+                                  ),
+                                  const Text(
+                                    "Batas Pendaftaran:",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(DateFormat('EEEE, dd MMMM yyyy', 'id')
+                                      .format(data.batas!)),
+                                ],
+                              )
                             ],
-                          )
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 15,)
-,                    ],
-                  ),
+                    );
+                  },
                 );
-              },
-            );
-          } else {
-            return const Center(
-              child: Text("Tidak Ada Turnamen yang tersedia di Level Anda"),
-            );
-          }
-        },
+              } else {
+                return const Center(
+                  child: Text("Tidak Ada Turnamen yang tersedia di Level Anda"),
+                );
+              }
+            },
+          ),
+        ],
       ),
     ));
   }

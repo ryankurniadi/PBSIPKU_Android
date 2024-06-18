@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../Pages/BlankPage.dart';
 import '../Pages/Profil.dart';
 import '../Pages/Riwayat.dart';
+import '../Pages/DataBerita.dart';
 import '../Pages/DataTurnamen.dart';
 import '../../Controllers/PBSIController.dart';
 import '../../Controllers/UserController.dart';
@@ -24,7 +25,7 @@ class _HomeState extends State<Home> {
   var _index = 0.obs;
 
   static final List<Widget> _widgetOptions = [
-    const BlankPage(),
+    DataBerita(),
     DataTrunamen(),
     Riwayat(),
     Profil(),
@@ -40,9 +41,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          appBar: AppBar(
-            title: const Text("PBSI PEKANBARU"),
-          ),
+
           bottomNavigationBar: Obx(() => AnimatedBottomNavigationBar.builder(
                 itemCount: 4,
                 activeIndex: _index.value,
