@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-import '../Models/PBSI.dart';
 import '../Models/User.dart';
 import './AuthController.dart';
 import './LoadingController.dart';
@@ -12,6 +16,9 @@ class UserController extends GetxController {
   final authC = Get.find<AuthController>();
   final loadC = Get.find<LoadingController>();
   String tabel = "users";
+
+  File? image;
+  var isImgPicked = false.obs;
 
   var dataUser = [].obs;
   var totalUser = 0.obs;
@@ -28,6 +35,8 @@ class UserController extends GetxController {
   var pbsi = "".obs;
   var skill = "Level D".obs;
   var hp = 0.obs;
+
+  var changeUsername = "".obs;
 
   var pbsiname = "".obs;
 
@@ -66,6 +75,26 @@ class UserController extends GetxController {
     } catch (e) {}
   }
 
+  imgPicked(bool value) {
+    isImgPicked.value = value;
+    update();
+  }
+
+  pickImage() async {
+    await Permission.photos.request();
+    var status = await Permission.photos.status;
+
+    if (status.isDenied) {
+      print("gagal");
+      return null;
+    }
+
+    final _image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (_image != null) {
+      image = File(_image.path);
+      imgPicked(true);
+    }
+  }
 
   levelUserChanger(bool value) {
     isRoot.value = value;
@@ -75,8 +104,8 @@ class UserController extends GetxController {
   getSingleUser() async {
     try {
       final ref = db.collection("users").withConverter(
-            fromFirestore: User.fromFirestore,
-            toFirestore: (User user, _) => user.toFirestore());
+          fromFirestore: User.fromFirestore,
+          toFirestore: (User user, _) => user.toFirestore());
       final data = await ref
           .where('email'.toString().toLowerCase(),
               isEqualTo: authC.authEmail.value.toLowerCase())
@@ -96,21 +125,101 @@ class UserController extends GetxController {
         token: data.docs[0]['token'],
       );
 
-
       final snap = await db.collection('pbsi').doc(userProfil!.pbsi).get();
-        if(snap != null){
-          pbsiname.value = snap.data()!['nama'];
-          //print(use.data()!['nama']);
-        }
+      if (snap != null) {
+        pbsiname.value = snap.data()!['nama'];
+        //print(use.data()!['nama']);
+      }
 
       update();
     } catch (e) {}
   }
 
+  changeUser() async {
+    loadC.changeLoading(true);
+    final ref = db.collection("users").withConverter(
+        fromFirestore: User.fromFirestore,
+        toFirestore: (User user, _) => user.toFirestore());
+
+    try {
+      final data = await ref
+          .where('username'.toString().toLowerCase(),
+              isEqualTo: changeUsername.value.toLowerCase())
+          .get();
+
+      if (data.docs.length >= 1) {
+        throw Exception("Udah ada");
+      }
+
+      final us = await db
+          .collection('userlogs')
+          .where('email'.toString().toLowerCase(),
+              isEqualTo: authC.authEmail.value.toLowerCase())
+          .get();
+      String logID = us.docs[0].id;
+
+      await ref.doc(authC.authUserID.value).update({
+        "username": changeUsername.value,
+      });
+      await db.collection('userlogs').doc(logID).update({
+        "username": changeUsername.value,
+      });
+
+      await getSingleUser();
+      Get.snackbar("Berhasil", "Username Berhasil DiGanti",
+          backgroundColor: Colors.green);
+      update();
+    } catch (e) {
+      Get.snackbar("Gagal", "Gagal, Username Sudah Di Gunakan",
+          backgroundColor: Colors.red);
+    }
+
+    loadC.changeLoading(false);
+  }
+
+  gantiProfil() async {
+    loadC.changeLoading(true);
+    final ref = db.collection("users").withConverter(
+        fromFirestore: User.fromFirestore,
+        toFirestore: (User user, _) => user.toFirestore());
+
+    try {
+      final data = await ref.doc(authC.authUserID.value).get();
+      String? imgLink = data.data()!.img;
+
+      Reference imgUpload = FirebaseStorage.instance
+          .ref()
+          .child('Users/')
+          .child(DateTime.now().microsecondsSinceEpoch.toString() + ".png");
+      UploadTask uploadTask = imgUpload.putFile(image!);
+
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+      String imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+      await ref.doc(authC.authUserID.value).update({
+        "img": imageUrl,
+      });
+
+      if (imgLink != defaultimg) {
+        Reference re = FirebaseStorage.instance.refFromURL(imgLink!);
+        await re.delete();
+      }
+
+      await getSingleUser();
+      update();
+      Get.snackbar("Berhasil", "Profil berhasil diganti",
+          backgroundColor: Colors.green);
+    } catch (e) {
+      Get.snackbar("Gagal", "Gagal, Mengganti Foto Profil",
+          backgroundColor: Colors.red);
+    }
+    loadC.changeLoading(false);
+  }
+
   @override
   void onInit() {
     getUserData();
-   
+
     super.onInit();
   }
 }

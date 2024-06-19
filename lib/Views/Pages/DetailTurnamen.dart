@@ -86,13 +86,21 @@ class DetailTurnamen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(
-                          height: 300,
-                          width: Get.width,
-                          child: Image.network(
-                            data.img!,
-                            fit: BoxFit.cover,
-                          )),
+                      InkWell(
+                        onTap: (){
+                          Get.defaultDialog(
+                            title: "Detail Gambar",
+                            content: Image.network(data.img!)
+                            );
+                        },
+                        child: SizedBox(
+                            height: 300,
+                            width: Get.width,
+                            child: Image.network(
+                              data.img!,
+                              fit: BoxFit.cover,
+                            )),
+                      ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 15, vertical: 6),

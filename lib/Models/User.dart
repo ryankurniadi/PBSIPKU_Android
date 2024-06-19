@@ -13,6 +13,7 @@ class User{
   String? img;
   String? token;
   int? hp;
+  int? nik;
 
   User({
     this.id,
@@ -22,6 +23,7 @@ class User{
     this.img,
     this.email,
     this.hp,
+    this.nik,
     this.pbsi,
     this.skill,
     this.isActive,
@@ -39,6 +41,7 @@ class User{
       nama: data?['nama'],
       email: data?['email'],
       hp: data?['hp'],
+      nik: data?['nik'],
       img: data?['img'],
       isActive: data?['isActive'],
       isPickUsername: data?['isPickUsername'],
@@ -56,6 +59,7 @@ class User{
       if (id != null) 'id' : id,
       if (email != null) 'email' : email,
       if (hp  != null) 'hp' : hp,
+      if (nik  != null) 'nik' : nik,
       if (username  != null) 'username' : username,
       if (img  != null) 'img' : img,
       if (level  != null) 'level' : level,
