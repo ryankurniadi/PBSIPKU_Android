@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:pull_to_refresh_flutter3/pull_to_refresh_flutter3.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../Widgets/NavBar.dart';
+import '../../Routes/PageNames.dart';
 import '../../Controllers/UserController.dart';
 import '../../Controllers/AuthController.dart';
+
 
 class Profil extends StatefulWidget {
   Profil({super.key});
@@ -30,6 +31,14 @@ class _ProfilState extends State<Profil> {
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          actions: [
+            IconButton(onPressed: (){
+              Get.toNamed(PageNames.Settings);
+            }, icon: const FaIcon(FontAwesomeIcons.ellipsisVertical))
+          ],
+        ),
         body: SmartRefresher(
           controller: _refreshController,
           onLoading: () async {

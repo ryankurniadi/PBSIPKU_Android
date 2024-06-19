@@ -9,6 +9,7 @@ abstract class PageNames{
   static const Blank = '/Blank';
   static const Login = '/Login';
   static const Init = '/Init';
+  static const Settings = '/Settings';
 
   //profil
   static const Profil = '/Profil';

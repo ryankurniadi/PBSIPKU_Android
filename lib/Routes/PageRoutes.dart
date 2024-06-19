@@ -12,6 +12,7 @@ import '../Views/Pages/BlankPage.dart';
 import '../Views/Pages/InitialPage.dart';
 import '../Views/Pages/DetailTurnamen.dart';
 import '../Views/Pages/BeritaFull.dart';
+import '../Views/Pages/Settings.dart';
 
 
 
@@ -38,6 +39,12 @@ class PageRoutes {
           AuthMiddleware(),
         ],
         page: () => Beranda()),
+    GetPage(
+        name: PageNames.Settings,
+        middlewares: [
+          AuthMiddleware(),
+        ],
+        page: () => Settings()),
     GetPage(
         name: PageNames.Login,
         middlewares: [LoginMiddleware()],

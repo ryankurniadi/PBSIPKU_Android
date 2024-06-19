@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,8 +20,12 @@ class AuthController extends GetxController {
   var isLogin = false.obs;
   var email = "".obs;
   var password = "".obs;
+  var newpassword = "".obs;
+  var newpassword2 = "".obs;
   var isLoginFail = false.obs;
   var isRegFail = false.obs;
+  var pasGaksama = false.obs;
+  var sandiSalah = false.obs;
 
   var authEmail = "".obs;
   var authLevel = "".obs;
@@ -201,6 +208,24 @@ class AuthController extends GetxController {
     } catch (e) {
       return null;
     }
+  }
+
+  changePassword() async {
+    loadC.changeLoading(true);
+    User? user = FirebaseAuth.instance.currentUser;
+    try {
+      final cred = EmailAuthProvider.credential(
+          email: authEmail.value, password: password.value);
+      await user?.reauthenticateWithCredential(cred);
+
+      await user?.updatePassword(newpassword.value);
+      Get.snackbar("Berhasil", "Kata Sandi Berhasil Diperbaharui",
+          backgroundColor: Colors.green);
+    } catch (e) {
+      Get.snackbar("Gagal", "Kata sandi gagal di perbaharui",
+          backgroundColor: Colors.red);
+    }
+    loadC.changeLoading(false);
   }
 
   @override
