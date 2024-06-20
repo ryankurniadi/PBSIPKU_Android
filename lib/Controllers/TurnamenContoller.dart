@@ -134,6 +134,7 @@ class TurnamenController extends GetxController {
         pbsi: docSnap['pbsi'],
         status: docSnap['status'],
         limit: docSnap['limit'],
+        biaya: docSnap['biaya'],
         kontak: docSnap['kontak'],
         tipe: docSnap['tipe'],
       ));

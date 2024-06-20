@@ -106,12 +106,17 @@ class DetailTurnamen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              data.nama!,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 23),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                            Container(
+                              constraints: BoxConstraints(
+                                    maxWidth: Get.width/1.18
+                                  ),
+                              child: Text(
+                                data.nama!,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 23),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                             const SizedBox(
                               height: 3,
@@ -215,7 +220,7 @@ class DetailTurnamen extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: 5,
                                 ),
                                 Container(
                                   decoration: BoxDecoration(
@@ -225,29 +230,15 @@ class DetailTurnamen extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 4, horizontal: 13),
                                     child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          const Icon(
-                                            Icons.phone,
-                                            size: 15,
+                                      child: Text(
+                                        NumberFormat.currency(
+                                                locale: 'id',
+                                                symbol: 'Rp. ',
+                                                decimalDigits: 0)
+                                            .format(data.biaya),
+                                        style: const TextStyle(
                                             color: Colors.white,
-                                          ),
-                                          const SizedBox(
-                                            width: 3,
-                                          ),
-                                          Text(
-                                            NumberFormat.currency(
-                                                    locale: 'id',
-                                                    symbol: 'Rp. ',
-                                                    decimalDigits: 0)
-                                                .format(data.biaya),
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -284,13 +275,18 @@ class DetailTurnamen extends StatelessWidget {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
-                                            "${data.lokasi}",
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
+                                          Container(
+                                            constraints: BoxConstraints(
+                                              maxWidth: Get.width/1.4
+                                            ),
+                                            child: Text(
+                                              "${data.lokasi}",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                         ],
                                       ),

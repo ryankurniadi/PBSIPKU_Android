@@ -31,6 +31,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialBinding: HomeBinding(),
       home: Initialpage(),
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+        
+      ),
       transitionDuration: Duration.zero,
       defaultTransition: Transition.noTransition,
       getPages: PageRoutes.Pages,

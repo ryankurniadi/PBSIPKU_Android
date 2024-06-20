@@ -25,8 +25,8 @@ class Riwayat extends StatelessWidget {
           const Row(
             children: [
               Text(
-                "Turnamen",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                "Riwayat Turnamen",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
               ),
             ],
           ),
@@ -56,8 +56,8 @@ class Riwayat extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 120,
-                              height: 160,
+                              width: 140,
+                              height: 180,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -76,19 +76,28 @@ class Riwayat extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "${data.namaTur}",
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
+                                Container(
+                                  constraints: BoxConstraints(
+                                    maxWidth: Get.width/1.9
+                                  ),
+                                  child: Text(
+                                    "${data.namaTur}",
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                Text(
-                                  "${data.lokasi}",
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(fontSize: 12),
+                                Container(
+                                  constraints:
+                                      BoxConstraints(maxWidth: Get.width / 2),
+                                  child: Text(
+                                    "${data.lokasi}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 6,
@@ -108,6 +117,7 @@ class Riwayat extends StatelessWidget {
                                             "${data.level}",
                                             style: const TextStyle(
                                                 color: Colors.white,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -133,6 +143,7 @@ class Riwayat extends StatelessWidget {
                                                 .format(data.biaya),
                                             style: const TextStyle(
                                                 color: Colors.white,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -163,6 +174,7 @@ class Riwayat extends StatelessWidget {
                                                         data.pembayaran!,
                                                         style: const TextStyle(
                                                             color: Colors.white,
+                                                            fontSize: 12,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold),
@@ -233,7 +245,7 @@ class Riwayat extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(
-                          height: 15,
+                          height: 25,
                         ),
                       ],
                     ),
