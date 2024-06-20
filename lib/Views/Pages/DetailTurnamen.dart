@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-
+import 'package:intl/intl.dart';
 
 import '../../Models/Turnamen.dart';
 import '../../Controllers/TurnamenContoller.dart';
 import '../../Controllers/AuthController.dart';
 import '../Widgets/LoadingBarrier.dart';
-
 
 class DetailTurnamen extends StatelessWidget {
   DetailTurnamen({super.key});
@@ -50,11 +49,11 @@ class DetailTurnamen extends StatelessWidget {
                   ),
                 );
               }
-        
+
               return InkWell(
-                onTap: () async{
-                  
-                  await turC.daftarTur(authC.authUserID.value, authC.authpbsi.value);
+                onTap: () async {
+                  await turC.daftarTur(
+                      authC.authUserID.value, authC.authpbsi.value);
                 },
                 child: Container(
                   height: 60,
@@ -87,11 +86,10 @@ class DetailTurnamen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       InkWell(
-                        onTap: (){
+                        onTap: () {
                           Get.defaultDialog(
-                            title: "Detail Gambar",
-                            content: Image.network(data.img!)
-                            );
+                              title: "Detail Gambar",
+                              content: Image.network(data.img!));
                         },
                         child: SizedBox(
                             height: 300,
@@ -187,7 +185,7 @@ class DetailTurnamen extends StatelessWidget {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.green,
+                                      color: Colors.purple,
                                       borderRadius: BorderRadius.circular(5)),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -207,6 +205,44 @@ class DetailTurnamen extends StatelessWidget {
                                           ),
                                           Text(
                                             data.kontak!,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.green,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4, horizontal: 13),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.phone,
+                                            size: 15,
+                                            color: Colors.white,
+                                          ),
+                                          const SizedBox(
+                                            width: 3,
+                                          ),
+                                          Text(
+                                            NumberFormat.currency(
+                                                    locale: 'id',
+                                                    symbol: 'Rp. ',
+                                                    decimalDigits: 0)
+                                                .format(data.biaya),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),

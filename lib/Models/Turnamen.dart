@@ -11,6 +11,7 @@ class Turnamen {
   final String? kontak;
   final String? tipe;
   final int? limit;
+  final int? biaya;
   final String? pbsi;
   final DateTime? date;
   final DateTime? batas;
@@ -26,6 +27,7 @@ class Turnamen {
       this.ket,
       this.status,
       this.date,
+      this.biaya,
       this.level,
       this.batas,
       this.pbsi});
@@ -41,6 +43,7 @@ class Turnamen {
       limit: data?["limit"],
       kontak: data?["kontak"],
       tipe: data?["tipe"],
+      biaya: data?["biaya"],
       status: data?["status"],
       ket: data?["ket"],
       level: data?["level"],
@@ -62,6 +65,7 @@ class Turnamen {
       if (limit != null) 'pbsi': limit,
       if (kontak != null) 'kontak': kontak,
       if (tipe != null) 'tipe': tipe,
+      if (biaya != null) 'biaya': biaya,
       if (date != null) 'date': date,
       if (batas != null) 'batas': batas,
       if (lokasi != null) 'lokasi': lokasi,

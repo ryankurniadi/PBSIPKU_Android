@@ -6,7 +6,6 @@ import '../../Models/PesertaView.dart';
 import '../../Controllers/AuthController.dart';
 import '../../Controllers/TurnamenContoller.dart';
 
-
 class Riwayat extends StatelessWidget {
   Riwayat({super.key});
 
@@ -15,7 +14,8 @@ class Riwayat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     turC.getUserTur(authC.authUserID.value);
-    return SafeArea(child: Scaffold(
+    return SafeArea(
+        child: Scaffold(
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         children: [
@@ -48,9 +48,7 @@ class Riwayat extends StatelessWidget {
                 itemBuilder: (context, index) {
                   Pesertaview data = turC.riwayatTur[index];
                   return InkWell(
-                    onTap: () async {
-          
-                    },
+                    onTap: () async {},
                     child: Column(
                       children: [
                         Row(
@@ -81,7 +79,8 @@ class Riwayat extends StatelessWidget {
                                 Text(
                                   "${data.namaTur}",
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 18),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -94,26 +93,112 @@ class Riwayat extends StatelessWidget {
                                 const SizedBox(
                                   height: 6,
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.orange,
-                                      borderRadius: BorderRadius.circular(5)),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 2, horizontal: 10),
-                                    child: Center(
-                                      child: Text(
-                                        "${data.level}",
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.orange,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 10),
+                                        child: Center(
+                                          child: Text(
+                                            "${data.level}",
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius:
+                                              BorderRadius.circular(5)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 2, horizontal: 10),
+                                        child: Center(
+                                          child: Text(
+                                            NumberFormat.currency(
+                                                    locale: 'id',
+                                                    symbol: 'Rp. ',
+                                                    decimalDigits: 0)
+                                                .format(data.biaya),
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                                 const SizedBox(
                                   height: 6,
                                 ),
+                                (data.status == 'Disetujui'
+                                    ? Column(
+                                        children: [
+                                          (data.pembayaran == "Lunas"
+                                              ? Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 4,
+                                                        horizontal: 13),
+                                                    child: Center(
+                                                      child: Text(
+                                                        data.pembayaran!,
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : Container(
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5)),
+                                                  child: Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        vertical: 4,
+                                                        horizontal: 13),
+                                                    child: Center(
+                                                      child: Text(
+                                                        data.pembayaran!,
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )),
+                                          const SizedBox(
+                                            height: 6,
+                                          ),
+                                        ],
+                                      )
+                                    : const SizedBox()),
                                 const Text(
                                   "Status Pengajuan:",
                                   overflow: TextOverflow.ellipsis,

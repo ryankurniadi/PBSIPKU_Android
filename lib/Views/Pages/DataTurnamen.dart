@@ -115,22 +115,44 @@ class _DataTrunamenState extends State<DataTrunamen> {
                                   const SizedBox(
                                     height: 6,
                                   ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.orange,
-                                        borderRadius: BorderRadius.circular(5)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 2, horizontal: 10),
-                                      child: Center(
-                                        child: Text(
-                                          "${data.level}",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.orange,
+                                            borderRadius: BorderRadius.circular(5)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 10),
+                                          child: Center(
+                                            child: Text(
+                                              "${data.level}",
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      const SizedBox(width: 5,),
+                                       Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.circular(5)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 10),
+                                          child: Center(
+                                            child: Text(
+                                              NumberFormat.currency(locale: 'id', symbol: 'Rp. ', decimalDigits: 0).format(data.biaya),
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   const SizedBox(
                                     height: 6,

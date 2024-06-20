@@ -69,6 +69,7 @@ class TurnamenController extends GetxController {
             id: docSnap.docs[i].id,
             nama: docSnap.docs[i].data().nama,
             img: docSnap.docs[i].data().img,
+            biaya: docSnap.docs[i].data().biaya,
             ket: docSnap.docs[i].data().ket,
             status: docSnap.docs[i].data().status,
             date: docSnap.docs[i].data().date,
@@ -151,6 +152,7 @@ class TurnamenController extends GetxController {
         "idTurnamen": turID.value,
         "idPBSI": idPBSI,
         "status": "Pending",
+        "pembayaran": "Belum Lunas",
         "createdAt": DateTime.now(),
       });
       terDaftar.value = true;
@@ -214,6 +216,8 @@ class TurnamenController extends GetxController {
             img: dataTur.data()!.img,
             level: dataTur.data()!.level,
             lokasi: dataTur.data()!.lokasi,
+            biaya: dataTur.data()!.biaya,
+            pembayaran: dataPeserta.docs[i].data().pembayaran,
             status: dataPeserta.docs[i].data().status,
           ));
         }
