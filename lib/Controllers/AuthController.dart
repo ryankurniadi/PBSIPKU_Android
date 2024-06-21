@@ -33,6 +33,7 @@ class AuthController extends GetxController {
   var authpbsinama = "".obs;
   var authimg = "".obs;
   var authUserID = "".obs;
+  var authSkill = "".obs;
   var authNIK = 0.obs;
 
   var authtoken = "".obs;
@@ -52,6 +53,7 @@ class AuthController extends GetxController {
           isEqualTo: authEmail.value.toLowerCase());
       final data = await datas.get();
       authLevel.value = data.docs[0]['level'];
+      authSkill.value = data.docs[0]['skill'];
       authpbsi.value = data.docs[0]['pbsi'];
       authimg.value = data.docs[0]['img'];
       authNIK.value = data.docs[0]['nik'];
@@ -122,6 +124,7 @@ class AuthController extends GetxController {
                 isEqualTo: authEmail.value.toLowerCase())
             .get();
         authLevel.value = data.docs[0]['level'];
+        authSkill.value = data.docs[0]['skill'];
         authpbsi.value = data.docs[0]['pbsi'];
         authimg.value = data.docs[0]['img'];
         authNIK.value = data.docs[0]['nik'];

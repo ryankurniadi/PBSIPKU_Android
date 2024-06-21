@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pbsipku/Models/PesertaView.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../Models/Peserta.dart';
 import '../Models/User.dart';
 import './AuthController.dart';
 import './LoadingController.dart';
@@ -35,6 +37,7 @@ class UserController extends GetxController {
   var pbsi = "".obs;
   var skill = "Level D".obs;
   var hp = 0.obs;
+  var userID2 = "".obs;
 
   var changeUsername = "".obs;
 
@@ -42,6 +45,9 @@ class UserController extends GetxController {
 
   var isRoot = true.obs;
   User? userProfil;
+
+
+  var dataUserPBSI = [].obs;
 
   getUserData() async {
     final ref = db.collection("users").withConverter(
@@ -214,6 +220,39 @@ class UserController extends GetxController {
           backgroundColor: Colors.red);
     }
     loadC.changeLoading(false);
+  }
+
+  getPBSIUser(String idPBSI)async {
+    final ref = db.collection("users").withConverter(
+        fromFirestore: User.fromFirestore,
+        toFirestore: (User user, _) => user.toFirestore());
+
+    try {
+      final data = await ref.where('pbsi'.toString(), isEqualTo: authC.authpbsi.value)
+      .where('email'.toString(),isNotEqualTo: authC.authEmail.value)
+      .where('skill'.toString(), isEqualTo: authC.authSkill.value)
+      .get();
+      
+      if(data.docs.isNotEmpty){
+        dataUserPBSI.clear();
+        for (var i = 0; i < data.docs.length; i++) {
+          dataUserPBSI.add(
+            User(
+              id: data.docs[i].id,
+              nama: data.docs[i]['nama'],
+              hp: data.docs[i]['hp'],
+              email: data.docs[i]['email'],
+            ),
+          );
+          
+        }
+      }
+
+    } catch (e) {
+      print(e);
+    }
+
+    update();
   }
 
   @override

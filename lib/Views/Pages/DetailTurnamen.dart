@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:intl/intl.dart';
+import 'package:pbsipku/Models/User.dart';
 
+import '../../Controllers/UserController.dart';
 import '../../Models/Turnamen.dart';
 import '../../Controllers/TurnamenContoller.dart';
 import '../../Controllers/AuthController.dart';
@@ -13,10 +15,12 @@ class DetailTurnamen extends StatelessWidget {
   DetailTurnamen({super.key});
   final authC = Get.find<AuthController>();
   final turC = Get.find<TurnamenController>();
+  final userC = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
     turC.cekTerdaftar(authC.authUserID.value);
+    userC.getPBSIUser(authC.authpbsi.value);
     return SafeArea(
       child: LoadingBarrier(
         child: Scaffold(
@@ -51,9 +55,51 @@ class DetailTurnamen extends StatelessWidget {
               }
 
               return InkWell(
-                onTap: () async {
-                  await turC.daftarTur(
-                      authC.authUserID.value, authC.authpbsi.value);
+                onTap: () {
+                  Get.defaultDialog(
+                    title: "Pilih Pasangan",
+                    titlePadding: const EdgeInsets.only(top: 10),
+                    content: GetBuilder<UserController>(
+                      builder: (_) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                          child: DropdownButtonFormField(
+                            decoration: const InputDecoration(
+                                border: OutlineInputBorder()),
+                            hint: const Text("Pilih Pasangan"),
+                            onChanged: (value) {
+                              userC.userID2.value = value!;
+                            },
+                            validator: (value){
+                              if(value == null){
+                                return "Pasangan Wajib dipilih";
+                              }
+                              return null;
+                            },
+                            items: List<DropdownMenuItem>.generate(
+                                userC.dataUserPBSI.length, (index) {
+                              User data = userC.dataUserPBSI[index];
+                              return DropdownMenuItem(
+                                value: "${data.id}",
+                                child: Text("${data.nama}"),
+                              );
+                            }),
+                          ),
+                        );
+                      },
+                    ),
+                    confirm: TextButton(
+                      style: const ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(Colors.green),
+                      ),
+                      child: const Text("Ajukan Pendaftaran", style: TextStyle(color: Colors.white),),
+                      onPressed: () {
+                        turC.daftarTur(authC.authUserID.value,
+                            userC.userID2.value, authC.authpbsi.value);
+                        Get.back();
+                      },
+                    ),
+                  );
                 },
                 child: Container(
                   height: 60,
@@ -107,9 +153,8 @@ class DetailTurnamen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              constraints: BoxConstraints(
-                                    maxWidth: Get.width/1.18
-                                  ),
+                              constraints:
+                                  BoxConstraints(maxWidth: Get.width / 1.18),
                               child: Text(
                                 data.nama!,
                                 style: const TextStyle(
@@ -277,8 +322,7 @@ class DetailTurnamen extends StatelessWidget {
                                           ),
                                           Container(
                                             constraints: BoxConstraints(
-                                              maxWidth: Get.width/1.4
-                                            ),
+                                                maxWidth: Get.width / 1.4),
                                             child: Text(
                                               "${data.lokasi}",
                                               maxLines: 1,

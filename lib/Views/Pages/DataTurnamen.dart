@@ -49,11 +49,11 @@ class _DataTrunamenState extends State<DataTrunamen> {
         ),
         GetBuilder<TurnamenController>(
           builder: (turC) {
-            if (turC.totalTur.value > 0) {
+            if (turC.dataTurnamen.isNotEmpty) {
               return ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: turC.totalTur.value,
+                itemCount: turC.dataTurnamen.length,
                 itemBuilder: (context, index) {
                   Turnamen data = turC.dataTurnamen[index];
                   return InkWell(
@@ -148,11 +148,13 @@ class _DataTrunamenState extends State<DataTrunamen> {
                                             vertical: 2, horizontal: 10),
                                         child: Center(
                                           child: Text(
-                                            NumberFormat.currency(
-                                                    locale: 'id',
-                                                    symbol: 'Rp. ',
-                                                    decimalDigits: 0)
-                                                .format(data.biaya),
+                                            (data.biaya == 0
+                                                ? "Gratis"
+                                                : NumberFormat.currency(
+                                                        locale: 'id',
+                                                        symbol: 'Rp. ',
+                                                        decimalDigits: 0)
+                                                    .format(data.biaya)),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,
@@ -162,6 +164,35 @@ class _DataTrunamenState extends State<DataTrunamen> {
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(
+                                  height: 6,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.purple,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 13),
+                                    child: Center(
+                                      child: (data.tipe == "Publik"
+                                          ? Text(
+                                              "${data.tipe}",
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold),
+                                            )
+                                          : const Text(
+                                              "Internal PBSI",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            )),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 6,

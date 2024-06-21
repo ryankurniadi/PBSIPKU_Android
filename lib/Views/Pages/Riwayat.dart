@@ -77,9 +77,8 @@ class Riwayat extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth: Get.width/1.9
-                                  ),
+                                  constraints:
+                                      BoxConstraints(maxWidth: Get.width / 1.9),
                                   child: Text(
                                     "${data.namaTur}",
                                     style: const TextStyle(
@@ -98,6 +97,30 @@ class Riwayat extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 12),
                                   ),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 2, horizontal: 10),
+                                    child: Center(
+                                      child: Text(
+                                        "Pasangan: ",
+                                        style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  "${data.nama2}",
+                                  style: const TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 const SizedBox(
                                   height: 6,
@@ -136,11 +159,13 @@ class Riwayat extends StatelessWidget {
                                             vertical: 2, horizontal: 10),
                                         child: Center(
                                           child: Text(
-                                            NumberFormat.currency(
-                                                    locale: 'id',
-                                                    symbol: 'Rp. ',
-                                                    decimalDigits: 0)
-                                                .format(data.biaya),
+                                            (data.biaya == 0
+                                                ? "Gratis"
+                                                : NumberFormat.currency(
+                                                        locale: 'id',
+                                                        symbol: 'Rp. ',
+                                                        decimalDigits: 0)
+                                                    .format(data.biaya)),
                                             style: const TextStyle(
                                                 color: Colors.white,
                                                 fontSize: 12,
@@ -157,60 +182,131 @@ class Riwayat extends StatelessWidget {
                                 (data.status == 'Disetujui'
                                     ? Column(
                                         children: [
-                                          (data.pembayaran == "Lunas"
-                                              ? Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.green,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 4,
+                                          Row(children: [
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.purple,
+                                                  borderRadius:
+                                                      BorderRadius.circular(5)),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 2,
                                                         horizontal: 13),
-                                                    child: Center(
-                                                      child: Text(
-                                                        data.pembayaran!,
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                child: Center(
+                                                  child: (data.tipe == "Publik"
+                                                      ? Text(
+                                                          "${data.tipe}",
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )
+                                                      : const Text(
+                                                          "Internal PBSI",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 12,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        )),
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 5,
+                                            ),
+                                            (data.pembayaran == "Lunas"
+                                                ? Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 2,
+                                                          horizontal: 13),
+                                                      child: Center(
+                                                        child: Text(
+                                                          data.pembayaran!,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )
-                                              : Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.red,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5)),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        vertical: 4,
-                                                        horizontal: 13),
-                                                    child: Center(
-                                                      child: Text(
-                                                        data.pembayaran!,
-                                                        style: const TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                  )
+                                                : Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5)),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          vertical: 2,
+                                                          horizontal: 13),
+                                                      child: Center(
+                                                        child: Text(
+                                                          data.pembayaran!,
+                                                          style: const TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                )),
+                                                  )),
+                                          ]),
                                           const SizedBox(
                                             height: 6,
                                           ),
                                         ],
                                       )
-                                    : const SizedBox()),
+                                    : Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.purple,
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 2, horizontal: 13),
+                                          child: Center(
+                                            child: (data.tipe == "Publik"
+                                                ? Text(
+                                                    "${data.tipe}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 10,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )
+                                                : const Text(
+                                                    "Internal PBSI",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  )),
+                                          ),
+                                        ),
+                                      )),
                                 const Text(
                                   "Status Pengajuan:",
                                   overflow: TextOverflow.ellipsis,
